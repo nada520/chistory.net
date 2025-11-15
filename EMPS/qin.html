@@ -1,0 +1,745 @@
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>秦</title>
+<meta charset="utf-8"/>
+<style>
+/* 字符串提示框样式 - 保持原有的悬停效果外观 */
+.string-tooltip {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.7);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    width: 200px;
+    z-index: 1000;
+    display: none;
+    pointer-events: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    line-height: 1.4;
+    white-space: normal;
+}
+
+.string-tooltip h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 4px;
+}
+
+.string-tooltip .info-line {
+    margin: 4px 0;
+    display: block;
+    color: #ffffff;
+}
+
+/* 功能键样式 */
+.function-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.function-button {
+    width: 80px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.function-button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.function-button:active {
+    transform: translateY(0);
+}
+
+.back-button {
+    background-color: #8BA4AF;
+    /* 雾霾蓝 */
+}
+
+.refresh-button {
+    background-color: #E8D96F;
+    /* 雾霾黄 */
+    color: #333;
+}
+
+.function-button svg {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+}</style>
+</head>
+<body>
+<!-- 功能键 -->
+<div class="function-buttons">
+    <button class="function-button back-button" onclick="improvedGoBack()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        返回
+    </button>
+    <button class="function-button refresh-button" onclick="refreshPage()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        刷新
+    </button>
+</div>
+<div class="mxgraph" style="max-width:100%;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;target&quot;:&quot;self&quot;,&quot;lightbox&quot;:false,&quot;nav&quot;:true,&quot;dark-mode&quot;:&quot;light&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;Electron\&quot; agent=\&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36\&quot; version=\&quot;28.2.8\&quot;&gt;\n  &lt;diagram name=\&quot;第 1 页\&quot; id=\&quot;otVk7g7sL048PSS3A6mR\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;2253\&quot; dy=\&quot;598\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;827\&quot; pageHeight=\&quot;1169\&quot; math=\&quot;1\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;胡亥&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;秦 二世&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;前210-前207&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;扶苏&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;秦 公子&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;105\&quot; y=\&quot;90\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-67\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; target=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-68\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-67\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0066\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;嬴政&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;始皇帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;前221-前210&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-2\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-20\&quot; y=\&quot;289.5\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;90\&quot; y=\&quot;290\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-3\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-2\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0285\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; value=\&quot;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;子婴&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;秦王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;前206-前207&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-17\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;380\&quot; y=\&quot;510\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;380\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-18\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-17\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.4333\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;tipiqoG0_gblMhU4JYaO-1\&quot; value=\&quot;11年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;350\&quot; width=\&quot;55\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;tipiqoG0_gblMhU4JYaO-2\&quot; value=\&quot;3年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;350\&quot; width=\&quot;15\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;tipiqoG0_gblMhU4JYaO-3\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;350\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}"></div>
+
+<script>
+    // 页面加载完成后执行居中逻辑
+    window.addEventListener('load', centerGraphElement);
+    // 窗口大小改变时重新执行居中逻辑
+    window.addEventListener('resize', centerGraphElement);
+
+    /**
+     * 动态计算图表元素的上下左右居中位置，并通过定位样式实现。
+     */
+    function centerGraphElement() {
+        // 1. 获取包含图表的 DIV 元素 (mxgraph viewer 容器)
+        const graphDiv = document.querySelector('.mxgraph');
+        
+        if (!graphDiv) {
+            console.error('找不到类名为 "mxgraph" 的图表容器元素。');
+            return;
+        }
+
+        // 2. 将容器的父元素 (body) 设置为相对定位，以便子元素可以绝对定位
+        document.body.style.position = 'relative';
+        document.body.style.minHeight = '100vh'; // 确保 body 至少占满整个视口高度
+        
+        // 3. 应用绝对定位居中样式
+        graphDiv.style.position = 'absolute';
+        graphDiv.style.top = '50%';
+        graphDiv.style.left = '50%';
+        
+        // 4. 获取图表元素的实际宽度和高度
+        const elementWidth = graphDiv.offsetWidth;
+        const elementHeight = graphDiv.offsetHeight;
+
+        // 5. 使用 transform 属性将元素平移自身宽高的一半，实现真正的中心对齐
+        // 这一步是关键，它解决了 left: 50%; top: 50%; 只是将元素的左上角放在中心的问题。
+        graphDiv.style.transform = `translate(-${elementWidth / 2}px, -${elementHeight / 2}px)`;
+
+        // 移除可能影响定位的 margin
+        graphDiv.style.margin = '0';
+    }
+</script>
+<!-- 字符串提示框 -->
+<div id="string-tooltip" class="string-tooltip"></div>
+
+<script type="text/javascript" src="../script/viewer-static.js"></script>
+
+<script type="text/javascript">
+
+// 字符串数据
+const stringData = {
+    '嬴政': {
+        title: '嬴政',
+        lines: ['嬴政 (前259年—前210年)', '嬴姓，赵氏', '中国古代杰出的政治家、战略家、改革家', '中国第一位称皇帝的君主']
+    },
+    '扶苏': {
+        title: '扶苏',
+        lines: ['扶苏（？—前210年）', '嬴姓，名扶苏', '秦朝皇室成员，秦始皇长子']
+    },
+    '胡亥': {
+        title: '胡亥',
+        lines: ['胡亥（前221年—前207年）', '即秦二世，嬴姓，赵氏，名胡亥', '秦始皇第十八子，公子扶苏之弟。秦朝第二位皇帝']
+    },
+    '子婴': {
+        title: '子婴',
+        lines: ['子婴（？—公元前206年）', '姓嬴，名子婴，一说名婴', '秦朝最后一位统治者']
+    },
+};
+
+
+// 等待页面和mxgraph完全加载 - 使用更谨慎的初始化方式
+function initializeTooltips() {
+    const tooltip = document.getElementById('string-tooltip');
+    let currentTimeout = null;
+
+    // 等待mxgraph渲染完成 - 增加延迟以避免与居中功能冲突
+    setTimeout(() => {
+        // 查找所有包含目标字符串的元素
+        const allElements = document.querySelectorAll('*');
+        
+        allElements.forEach(element => {
+            const textContent = element.textContent || element.innerText;
+            if (textContent && textContent.trim()) {
+                // 检查是否包含目标字符串
+                for (const targetString in stringData) {
+                    if (textContent.includes(targetString) && !element.querySelector('*')) {
+                        // 确保这是一个叶子节点（没有子元素）
+                        element.style.cursor = 'pointer';
+                        element.setAttribute('data-string', targetString);
+                        
+                        element.addEventListener('mouseenter', function(e) {
+                            const stringInfo = stringData[targetString];
+                            if (stringInfo) {
+                                // 清除可能存在的隐藏定时器
+                                if (currentTimeout) {
+                                    clearTimeout(currentTimeout);
+                                    currentTimeout = null;
+                                }
+                                
+                                // 构建提示内容
+                                let content = `<h4>${stringInfo.title}</h4>`;
+                                stringInfo.lines.forEach(line => {
+                                    content += `<div class="info-line">${line}</div>`;
+                                });
+                                
+                                tooltip.innerHTML = content;
+                                
+                                // 计算提示框位置 - 使用更安全的方法
+                                const rect = element.getBoundingClientRect();
+                                
+                                let left = rect.left + (rect.width / 2) - 100; // 居中显示
+                                let top = rect.top - 15; // 在元素上方显示
+                                
+                                // 确保提示框不超出页面边界
+                                if (left + 200 > window.innerWidth) {
+                                    left = window.innerWidth - 210;
+                                }
+                                if (left < 10) {
+                                    left = 10;
+                                }
+                                if (top < 10) {
+                                    top = rect.bottom + 15; // 如果上方空间不够，显示在下方
+                                }
+                                
+                                tooltip.style.left = left + 'px';
+                                tooltip.style.top = top + 'px';
+                                tooltip.style.display = 'block';
+                            }
+                        });
+                        
+                        element.addEventListener('mouseleave', function() {
+                            // 添加延迟隐藏，避免鼠标快速移动时闪烁
+                            currentTimeout = setTimeout(() => {
+                                tooltip.style.display = 'none';
+                            }, 150);
+                        });
+                        
+                        break; // 找到匹配的字符串后跳出循环
+                    }
+                }
+            }
+        });
+    }, 3000); // 增加延迟时间，确保居中功能完成
+}
+
+// 页面加载完成后初始化 - 避免干扰已有的居中逻辑
+document.addEventListener('DOMContentLoaded', function() {
+    // 延迟初始化，避免与现有的居中功能冲突
+    setTimeout(initializeTooltips, 2000);
+});
+
+// 额外的保护：确保在所有脚本加载完成后再初始化
+if (document.readyState === 'complete') {
+    setTimeout(initializeTooltips, 2000);
+} else {
+    window.addEventListener('load', () => {
+        setTimeout(initializeTooltips, 2000);
+    });
+}
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+<script>
+// =================== 修正版交互功能代码 ===================
+
+// 全局变量
+let currentScale = 1;
+let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let graphContainer = null;
+let isInitialized = false;
+
+// 等待draw.io图表渲染完成
+function waitForDiagram() {
+    return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50; // 最多等待5秒
+        
+        function checkDiagram() {
+            attempts++;
+            
+            // 尝试多种方式找到图表容器
+            const container = document.querySelector('.mxgraph');
+            const svg = document.querySelector('svg');
+            const canvas = document.querySelector('canvas');
+            
+            if (container || svg || canvas) {
+                console.log('找到图表容器:', { container, svg, canvas });
+                resolve(container || svg || canvas);
+                return;
+            }
+            
+            if (attempts >= maxAttempts) {
+                console.warn('未找到图表容器，使用body作为容器');
+                resolve(document.body);
+                return;
+            }
+            
+            setTimeout(checkDiagram, 100);
+        }
+        
+        checkDiagram();
+    });
+}
+
+// 初始化交互功能
+async function initializeInteractions() {
+    if (isInitialized) {
+        console.log('交互功能已经初始化过了');
+        return;
+    }
+    
+    console.log('开始初始化交互功能...');
+    
+    try {
+        // 等待图表加载完成
+        graphContainer = await waitForDiagram();
+        
+        if (!graphContainer) {
+            console.error('无法找到图表容器');
+            return;
+        }
+        
+        console.log('图表容器:', graphContainer);
+        
+        // 为容器添加必要的样式
+        if (graphContainer.style) {
+            graphContainer.style.transformOrigin = 'center center';
+            graphContainer.style.cursor = 'grab';
+        }
+        
+        // 添加滚轮事件监听器（防止默认行为）
+        if (graphContainer.addEventListener) {
+            graphContainer.addEventListener('wheel', handleWheelZoom, { passive: false });
+            
+            // 添加鼠标事件监听器
+            graphContainer.addEventListener('mousedown', handleMouseDown);
+            
+            // 为整个文档添加鼠标移动和释放事件
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+            console.log('事件监听器添加完成');
+        }
+        
+        // 检查是否已经有初始的transform
+        checkAndApplyTransform();
+        
+        isInitialized = true;
+        console.log('交互功能初始化完成');
+        
+    } catch (error) {
+        console.error('初始化交互功能时出错:', error);
+    }
+}
+
+// 最精确的滚轮缩放处理函数 - 以鼠标位置为中心缩放
+function handleWheelZoom(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (!graphContainer || !isInitialized) return;
+    
+    console.log('滚轮缩放事件 (最精确版):', event.deltaY, '鼠标位置:', event.clientX, event.clientY);
+    
+    // 获取缩放因子
+    const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
+    
+    // 计算新缩放值
+    const oldScale = currentScale;
+    const newScale = oldScale * zoomFactor;
+    
+    // 限制缩放范围
+    if (newScale >= 0.1 && newScale <= 4.0) {
+        // 获取图表的屏幕位置信息
+        const rect = graphContainer.getBoundingClientRect();
+        const containerLeft = rect.left;
+        const containerTop = rect.top;
+        const containerWidth = rect.width;
+        const containerHeight = rect.height;
+        
+        // 计算鼠标相对于图表容器的坐标
+        const mouseRelToContainerX = event.clientX - containerLeft;
+        const mouseRelToContainerY = event.clientY - containerTop;
+        
+        console.log('容器信息:', { left: containerLeft, top: containerTop, width: containerWidth, height: containerHeight });
+        console.log('鼠标相对容器:', { x: mouseRelToContainerX, y: mouseRelToContainerY });
+        
+        // 将鼠标位置转换为相对于图表内容中心的坐标
+        // 图表内容中心在容器中心
+        const centerX = containerWidth / 2;
+        const centerY = containerHeight / 2;
+        
+        // 鼠标相对于图表中心的坐标
+        const mouseRelToCenterX = mouseRelToContainerX - centerX;
+        const mouseRelToCenterY = mouseRelToContainerY - centerY;
+        
+        // 获取当前transform
+        const currentTransform = graphContainer.style.transform || '';
+        
+        // 提取当前的translate值
+        let translateX = 0;
+        let translateY = 0;
+        
+        const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+        
+        if (translateMatch) {
+            translateX = parseFloat(translateMatch[1]);
+            translateY = parseFloat(translateMatch[2]);
+        }
+        
+        // 缩放补偿算法：
+        // 鼠标位置应该在缩放后保持不变
+        // 如果鼠标在图表中心向右10px，向上5px
+        // 缩放2倍后，鼠标应该在图表中心向右20px，向上10px
+        // 所以我们需要调整translate来补偿这个位移
+        const scaleChange = newScale - oldScale;
+        const centerAdjustX = -mouseRelToCenterX * scaleChange / oldScale;
+        const centerAdjustY = -mouseRelToCenterY * scaleChange / oldScale;
+        
+        // 应用新的变换
+        const finalScale = newScale;
+        const finalTranslateX = translateX + centerAdjustX;
+        const finalTranslateY = translateY + centerAdjustY;
+        
+        graphContainer.style.transform = `translate(${finalTranslateX}px, ${finalTranslateY}px) scale(${finalScale})`;
+        
+        currentScale = finalScale;
+        
+        console.log(`缩放完成: ${(currentScale * 100).toFixed(0)}%`);
+        console.log('相对中心坐标:', { x: mouseRelToCenterX, y: mouseRelToCenterY });
+        console.log('缩放补偿:', { x: centerAdjustX, y: centerAdjustY });
+        console.log('最终变换:', { tx: finalTranslateX, ty: finalTranslateY, scale: finalScale });
+    }
+}
+
+// 鼠标按下处理函数
+function handleMouseDown(event) {
+    if (!graphContainer || !isInitialized) return;
+    
+    // 只响应左键点击
+    if (event.button !== 0) return;
+    
+    // 检查是否点击在图表容器上
+    if (!graphContainer.contains(event.target)) return;
+    
+    console.log('鼠标按下事件');
+    
+    event.preventDefault();
+    isDragging = true;
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+    
+    if (graphContainer.style) {
+        graphContainer.style.cursor = 'grabbing';
+    }
+}
+
+// 鼠标移动处理函数
+function handleMouseMove(event) {
+    if (!isDragging || !graphContainer || !isInitialized) return;
+    
+    console.log('鼠标移动事件');
+    
+    event.preventDefault();
+    
+    // 计算鼠标移动距离
+    const deltaX = event.clientX - lastMouseX;
+    const deltaY = event.clientY - lastMouseY;
+    
+    // 获取当前的transform
+    const currentTransform = graphContainer.style.transform || '';
+    console.log('当前transform:', currentTransform);
+    
+    // 提取当前的translate值
+    let translateX = 0;
+    let translateY = 0;
+    let scale = 1;
+    
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    if (scaleMatch) {
+        scale = parseFloat(scaleMatch[1]);
+    } else {
+        scale = currentScale;
+    }
+    
+    // 更新位置
+    translateX += deltaX;
+    translateY += deltaY;
+    
+    // 应用新的transform
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+}
+
+// 鼠标释放处理函数
+function handleMouseUp() {
+    if (!isDragging) return;
+    
+    console.log('鼠标释放事件');
+    
+    isDragging = false;
+    
+    if (graphContainer && graphContainer.style) {
+        graphContainer.style.cursor = 'grab';
+    }
+}
+
+// 应用变换函数
+function applyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    const currentTransform = graphContainer.style.transform || '';
+    
+    // 如果已经有translate，保留它
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    
+    let translateX = 0;
+    let translateY = 0;
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+    console.log('应用变换:', `translate(${translateX}px, ${translateY}px) scale(${currentScale})`);
+}
+
+// 检查并应用初始transform
+function checkAndApplyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    // 如果容器已经有了transform，尝试解析其scale值
+    const currentTransform = graphContainer.style.transform || '';
+    
+    if (currentTransform.includes('scale')) {
+        const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+        if (scaleMatch) {
+            currentScale = parseFloat(scaleMatch[1]);
+            console.log('检测到已有scale:', currentScale);
+        }
+    }
+    
+    applyTransform();
+}
+
+// 键盘快捷键支持
+function handleKeyboardShortcuts(event) {
+    if (!graphContainer || !isInitialized) return;
+
+    switch(event.key) {
+        case '+':
+        case '=':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.min(currentScale * 1.2, 4.0);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                    console.log(`键盘缩放至: ${(currentScale * 100).toFixed(0)}%`);
+                }
+            }
+            break;
+            
+        case '-':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.max(currentScale * 0.8, 0.1);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                    console.log(`键盘缩放至: ${(currentScale * 100).toFixed(0)}%`);
+                }
+            }
+            break;
+            
+        case '0':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                currentScale = 1;
+                // 移除所有translate
+                graphContainer.style.transform = 'scale(1)';
+                console.log('重置视图');
+            }
+            break;
+    }
+}
+
+// 重置函数
+function resetView() {
+    if (!graphContainer || !isInitialized) return;
+    
+    currentScale = 1;
+    graphContainer.style.transform = 'scale(1)';
+    console.log('视图已重置');
+}
+
+// 添加键盘事件监听
+document.addEventListener('keydown', handleKeyboardShortcuts);
+
+// ================ 智能初始化逻辑 ================
+
+// 延迟初始化策略
+function smartInitialize() {
+    console.log('开始智能初始化...');
+    
+    // 策略1: 立即尝试初始化
+    setTimeout(initializeInteractions, 1000);
+    
+    // 策略2: 页面加载完成后再次尝试
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeInteractions, 2000);
+        });
+    }
+    
+    // 策略3: 窗口加载完成后最后尝试
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!isInitialized) {
+                console.log('使用备用初始化策略...');
+                initializeInteractions();
+            }
+        }, 3000);
+    });
+    
+    // 策略4: 定时重试机制
+    let retryCount = 0;
+    const maxRetries = 10;
+    
+    function retryInit() {
+        if (!isInitialized && retryCount < maxRetries) {
+            retryCount++;
+            console.log(`重试初始化 (${retryCount}/${maxRetries})...`);
+            setTimeout(() => {
+                initializeInteractions();
+                if (!isInitialized) {
+                    retryInit();
+                }
+            }, 2000);
+        }
+    }
+    
+    // 5秒后开始重试
+    setTimeout(retryInit, 5000);
+}
+
+// 启动智能初始化
+smartInitialize();
+
+// 导出功能供调试
+window.resetView = resetView;
+window.setScale = (scale) => {
+    currentScale = Math.max(0.1, Math.min(4.0, scale));
+    applyTransform();
+};
+
+console.log('修正版交互功能脚本已加载');
+
+// 功能键JavaScript
+function goBack() {
+    // 尝试多种返回方式
+    try {
+        // 方式1：尝试history.back()
+        if (window.history.length > 1) {
+            window.history.back();
+        }
+        // 方式2：如果history.back()无效，尝试document.referrer
+        else if (document.referrer && document.referrer !== window.location.href) {
+            window.location.href = document.referrer;
+        }
+        // 方式3：如果都没有，提供选项
+        else {
+            // 创建一个选择对话框
+            const choice = confirm('没有可返回的上一页。\n\n选择"确定"返回到上一页面\n选择"取消"刷新当前页面');
+            if (choice) {
+                // 尝试返回上一条历史记录（即使可能无效）
+                window.history.go(-1);
+            } else {
+                window.location.reload();
+            }
+        }
+    } catch (error) {
+        // 如果所有方式都失败，简单刷新页面
+        console.log('返回操作失败，刷新页面');
+        window.location.reload();
+    }
+}
+
+// 页面加载时记录导航信息
+window.addEventListener('load', function() {
+    // 如果是从其他页面跳转过来的，记录来源
+    if (document.referrer && document.referrer !== window.location.href) {
+        sessionStorage.setItem('previousPage', document.referrer);
+        console.log('记录来源页面:', document.referrer);
+    }
+});
+
+// 改进的返回函数，支持sessionStorage
+function improvedGoBack() {
+    // 优先使用sessionStorage中记录的页面
+    const previousPage = sessionStorage.getItem('previousPage');
+    if (previousPage && previousPage !== window.location.href) {
+        window.location.href = previousPage;
+        return;
+    }
+    
+    // 如果sessionStorage没有，则使用原逻辑
+    goBack();
+}
+
+function refreshPage() {
+    window.location.reload();
+}
+
+</script>
