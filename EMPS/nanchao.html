@@ -1,0 +1,871 @@
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>南朝</title>
+<meta charset="utf-8"/>
+<style>
+/* 字符串提示框样式 */
+.string-tooltip {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    width: 200px;
+    z-index: 1000;
+    display: none;
+    pointer-events: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    line-height: 1.4;
+    white-space: normal;
+}
+
+.string-tooltip h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.string-tooltip .title-line2 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    font-weight: normal;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.string-tooltip .title-separator {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.string-tooltip .info-line {
+    margin: 4px 0;
+    display: block;
+    color: #ffffff;
+}
+
+/* 功能键样式 */
+.function-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.function-button {
+    width: 80px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.function-button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.function-button:active {
+    transform: translateY(0);
+}
+
+.back-button {
+    background-color: #8BA4AF;
+}
+
+.refresh-button {
+    background-color: #E8D96F;
+    color: #333;
+}
+
+.function-button svg {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+}
+</style>
+</head>
+<body>
+<!-- 功能键 -->
+<div class="function-buttons">
+    <button class="function-button back-button" onclick="improvedGoBack()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        返回
+    </button>
+    <button class="function-button refresh-button" onclick="refreshPage()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        刷新
+    </button>
+</div>
+<div class="mxgraph" style="" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;target&quot;:&quot;self&quot;,&quot;lightbox&quot;:false,&quot;nav&quot;:true,&quot;dark-mode&quot;:&quot;light&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;Electron\&quot; agent=\&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36\&quot; version=\&quot;28.2.8\&quot;&gt;\n  &lt;diagram name=\&quot;第 1 页\&quot; id=\&quot;otVk7g7sL048PSS3A6mR\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;2935\&quot; dy=\&quot;1939\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;827\&quot; pageHeight=\&quot;1169\&quot; math=\&quot;0\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-81\&quot; value=\&quot;\&quot; style=\&quot;group;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-180\&quot; y=\&quot;440\&quot; width=\&quot;2550\&quot; height=\&quot;600\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-79\&quot; value=\&quot;\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#89A8FF;dashed=1;dashPattern=1 1;opacity=75;glass=0;shadow=0;treeFolding=0;enumerate=0;comic=0;arcSize=3;absoluteArcSize=0;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-81\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;2550\&quot; height=\&quot;600\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-80\&quot; value=\&quot;&amp;lt;font style=&amp;quot;color: rgb(126, 166, 224);&amp;quot;&amp;gt;南梁&amp;lt;/font&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=72;fontFamily=Helvetica;fontColor=#999999;textOpacity=60;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-81\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2210.0004878048776\&quot; y=\&quot;60\&quot; width=\&quot;283.72152439024387\&quot; height=\&quot;120\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-74\&quot; value=\&quot;\&quot; style=\&quot;group;fontColor=#7EA6E0;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-2469\&quot; y=\&quot;-70\&quot; width=\&quot;2000\&quot; height=\&quot;300\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-75\&quot; value=\&quot;\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#89A8FF;dashed=1;dashPattern=1 1;opacity=75;glass=0;shadow=0;treeFolding=0;enumerate=0;comic=0;arcSize=3;absoluteArcSize=0;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-74\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;2000\&quot; height=\&quot;300\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-76\&quot; value=\&quot;&amp;lt;font style=&amp;quot;color: rgb(126, 166, 224);&amp;quot;&amp;gt;刘宋&amp;lt;/font&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=72;fontFamily=Helvetica;fontColor=#999999;textOpacity=60;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-74\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;14\&quot; y=\&quot;20\&quot; width=\&quot;216\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-60\&quot; value=\&quot;\&quot; style=\&quot;group;fontColor=#7EA6E0;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1690\&quot; y=\&quot;10\&quot; width=\&quot;1430\&quot; height=\&quot;420\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-61\&quot; value=\&quot;\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#89A8FF;dashed=1;dashPattern=1 1;opacity=75;glass=0;shadow=0;treeFolding=0;enumerate=0;comic=0;arcSize=3;absoluteArcSize=0;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-60\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;1430\&quot; height=\&quot;420\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-62\&quot; value=\&quot;&amp;lt;font style=&amp;quot;color: rgb(126, 166, 224);&amp;quot;&amp;gt;南陈&amp;lt;/font&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=72;fontFamily=Helvetica;fontColor=#999999;textOpacity=60;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-60\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1100\&quot; y=\&quot;42\&quot; width=\&quot;278.93\&quot; height=\&quot;84\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; value=\&quot;\&quot; style=\&quot;group;fontColor=#7EA6E0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-400\&quot; y=\&quot;10\&quot; width=\&quot;1830\&quot; height=\&quot;420\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;9x-_xaN3fGt0kCVak8Zx-2\&quot; value=\&quot;\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#89A8FF;dashed=1;dashPattern=1 1;opacity=75;glass=0;shadow=0;treeFolding=0;enumerate=0;comic=0;arcSize=3;absoluteArcSize=0;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;1829.9999999999998\&quot; height=\&quot;420\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;9x-_xaN3fGt0kCVak8Zx-3\&quot; value=\&quot;&amp;lt;font style=&amp;quot;color: rgb(126, 166, 224);&amp;quot;&amp;gt;南齐&amp;lt;/font&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=72;fontFamily=Helvetica;fontColor=#999999;textOpacity=60;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1539.8780487804877\&quot; y=\&quot;42\&quot; width=\&quot;224.76640243902438\&quot; height=\&quot;84\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-13\&quot; value=\&quot;3年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;260\&quot; y=\&quot;340\&quot; width=\&quot;15\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-14\&quot; value=\&quot;10年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;490\&quot; y=\&quot;340\&quot; width=\&quot;50\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-15\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;720\&quot; y=\&quot;340\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-16\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;950\&quot; y=\&quot;340\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-17\&quot; value=\&quot;4年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1180\&quot; y=\&quot;340\&quot; width=\&quot;20\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-18\&quot; value=\&quot;3年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1410\&quot; y=\&quot;340\&quot; width=\&quot;15\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-19\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;9x-_xaN3fGt0kCVak8Zx-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1640.5\&quot; y=\&quot;340\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧赜&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;武帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;483-493&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;永明&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧长懋&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;文帝 (追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;220\&quot; y=\&quot;90\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧道成&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;高帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;479-482&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;建元&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-2\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-20\&quot; y=\&quot;289.5\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;90\&quot; y=\&quot;290\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-3\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-2\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0285\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; value=\&quot;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧昭业&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;郁林王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;494&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;隆昌&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-7\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧昭文&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;海陵恭王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;494&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;延兴&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-8\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧鸾&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;明帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;494-498&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;建武 永泰&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;780\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-13\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-30\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-8\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;300\&quot; y=\&quot;520\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-80\&quot; y=\&quot;40\&quot; /&gt;\n              &lt;mxPoint x=\&quot;840\&quot; y=\&quot;40\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-14\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-13\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.1152\&quot; y=\&quot;-2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-142\&quot; y=\&quot;-2\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-15\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;hoRvMOoBcbo1f3_xZscG-1\&quot; target=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;380\&quot; y=\&quot;510\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;150\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-16\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-15\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.4778\&quot; y=\&quot;2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-17\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;380\&quot; y=\&quot;510\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;380\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-18\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-17\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.4333\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-19\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-7\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;311\&quot; y=\&quot;120\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;610\&quot; y=\&quot;120\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-20\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-19\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.7709\&quot; y=\&quot;2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-21\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧宝卷&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;废帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;498-501&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;永元&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1010\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-22\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧宝融&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;和帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;501-502&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;中兴&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1240.5\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-23\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-8\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-21\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;380\&quot; y=\&quot;510\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;430\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-24\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-21\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;380\&quot; y=\&quot;510\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;1240\&quot; y=\&quot;290\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-32\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-25\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-33\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;k6RN-u3AjEEVAVt-Xl67-32\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.1636\&quot; y=\&quot;-3\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-2\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-34\&quot; value=\&quot;次子\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-25\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-30\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-25\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧承之&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;宣皇帝 (追)&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-370\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-30\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧道生&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;安贞王&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-125\&quot; y=\&quot;90\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-18\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-4\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-25\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;9x-_xaN3fGt0kCVak8Zx-7\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-18\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0071\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧乐子&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;-&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-530\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-17\&quot; value=\&quot;之子\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-5\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-5\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧隽&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;-&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-690\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-15\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-6\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-9\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-25\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-15\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0055\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-16\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-6\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-5\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-24\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-16\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0159\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-6\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧整&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;-&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-860\&quot; y=\&quot;475\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-21\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-7\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-11\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-28\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-21\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0435\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-7\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧道赐&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;-&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-355\&quot; y=\&quot;700\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-20\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-8\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-7\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-27\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-20\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0077\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-8\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧副子&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;-&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-530\&quot; y=\&quot;700\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-19\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-9\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-8\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-26\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-19\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0062\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-9\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font&amp;gt;&amp;lt;b style=&amp;quot;&amp;quot;&amp;gt;萧&amp;lt;/b&amp;gt;&amp;lt;span style=&amp;quot;margin: 0px; padding: 0px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-align: left; text-size-adjust: none;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;color: rgb(0, 0, 0);&amp;quot; face=&amp;quot;Helvetica&amp;quot;&amp;gt;鎋&amp;lt;/font&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-690\&quot; y=\&quot;700\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-22\&quot; value=\&quot;三子\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-11\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-23\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.995;exitY=0.378;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-11\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-14\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-29\&quot; value=\&quot;六子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-23\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.013\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-33\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-11\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-30\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;20\&quot; y=\&quot;650\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;20\&quot; y=\&quot;715\&quot; /&gt;\n              &lt;mxPoint x=\&quot;20\&quot; y=\&quot;510\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-34\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-33\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.094\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-11\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧顺之&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;文帝 (追)&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-38\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-36\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;210\&quot; y=\&quot;730\&quot; /&gt;\n              &lt;mxPoint x=\&quot;300\&quot; y=\&quot;730\&quot; /&gt;\n              &lt;mxPoint x=\&quot;300\&quot; y=\&quot;820\&quot; /&gt;\n              &lt;mxPoint x=\&quot;500\&quot; y=\&quot;820\&quot; /&gt;\n              &lt;mxPoint x=\&quot;500\&quot; y=\&quot;740\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-40\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-38\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0234\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-42\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-35\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-43\&quot; value=\&quot;养子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-42\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.1014\&quot; y=\&quot;-3\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-3\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-45\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-47\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;335\&quot; y=\&quot;910\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;210\&quot; y=\&quot;740\&quot; /&gt;\n              &lt;mxPoint x=\&quot;280\&quot; y=\&quot;740\&quot; /&gt;\n              &lt;mxPoint x=\&quot;280\&quot; y=\&quot;900\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-46\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-45\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.1794\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-59\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-54\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;220\&quot; y=\&quot;800\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;210\&quot; y=\&quot;750\&quot; /&gt;\n              &lt;mxPoint x=\&quot;260\&quot; y=\&quot;750\&quot; /&gt;\n              &lt;mxPoint x=\&quot;260\&quot; y=\&quot;980\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1170\&quot; y=\&quot;980\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1170\&quot; y=\&quot;740\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-60\&quot; value=\&quot;八子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-59\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0106\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-61\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-55\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;240\&quot; y=\&quot;765\&quot; /&gt;\n              &lt;mxPoint x=\&quot;240\&quot; y=\&quot;1020\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1420\&quot; y=\&quot;1020\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1420\&quot; y=\&quot;740\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-62\&quot; value=\&quot;七子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-61\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0282\&quot; y=\&quot;2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-13\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧衍&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;武帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;502-549&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天监 普通 大通 中大通&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;大同 中大同 太清&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-37\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-14\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-35\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-41\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-37\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.3625\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-14\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧宏&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;临川王&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;105\&quot; y=\&quot;580\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-66\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-30\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-56\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-67\&quot; value=\&quot;五子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-66\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.8814\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-30\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧懿&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;长沙郡王&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;105\&quot; y=\&quot;470\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-35\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧正德&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;前废帝帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;549&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;正平&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-36\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧纲&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;简文帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;549-551&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;大宝&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-49\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-47\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-48\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-50\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-49\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0036\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-91\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;jumpStyle=arc;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-47\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-85\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;500\&quot; y=\&quot;925\&quot; /&gt;\n              &lt;mxPoint x=\&quot;500\&quot; y=\&quot;1110\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-93\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-91\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.8822\&quot; y=\&quot;2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; y=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-47\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧统&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;昭明皇帝 (追)&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;850\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-52\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-48\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-51\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-53\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-52\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0009\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-48\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧欢&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;安皇帝 (追)&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;850\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-51\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧栋&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;豫章王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;551&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天正&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;780\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-54\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧纪&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;武陵贞献王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;552&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天正&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1240\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-68\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-55\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-57\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1650\&quot; y=\&quot;740\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1650\&quot; y=\&quot;820\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1880\&quot; y=\&quot;820\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1880\&quot; y=\&quot;740\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-69\&quot; value=\&quot;九子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-68\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0029\&quot; y=\&quot;-4\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-4\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-71\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-55\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-70\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-72\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-71\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.3845\&quot; y=\&quot;-2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;1\&quot; y=\&quot;-2\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-55\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧绎&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;元帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;552-554&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;承圣 天正&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1470.5\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-56\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧渊明&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;闵帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;555&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天成&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1700\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-57\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧方智&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;敬帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;555-557&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;绍泰 太平&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-58\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧庄&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;思帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;557-560&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天启&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2160.5\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-73\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;rd2UypRQe1kVlmL-rs96-70\&quot; target=\&quot;rd2UypRQe1kVlmL-rs96-58\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2110\&quot; y=\&quot;900\&quot; /&gt;\n              &lt;mxPoint x=\&quot;2110\&quot; y=\&quot;740\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-74\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;rd2UypRQe1kVlmL-rs96-73\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.3628\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;rd2UypRQe1kVlmL-rs96-70\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;萧方等&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;武烈世子 (追)&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1700\&quot; y=\&quot;850\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-2\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘准&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·顺帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;477-479&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;昇明&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-610\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-3\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘昱&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·后废帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;472-477&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;元徽&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-840\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-23\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-4\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-3\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-25\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-23\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0303\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-24\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.993;exitY=0.397;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-4\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-2\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-890\&quot; y=\&quot;120\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-890\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-660\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-660\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-26\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-24\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6134\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘彧&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·明帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;465-472&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;泰始 泰豫&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1070\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-5\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘子业&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·前废帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;464-465&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;永光&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1300\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-21\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-6\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-5\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-22\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-21\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0104\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-6\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘骏&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·孝武帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;453-464&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;孝建 大明&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1530\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-7\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.8px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.8px;&amp;quot;&amp;gt;刘劭&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·元帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;453-453&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;太初&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1760\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-15\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-8\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-7\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-18\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-15\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0242\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-16\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.99;exitY=0.398;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-8\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-6\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-1820\&quot; y=\&quot;120\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1820\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1580\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1580\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-19\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-16\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6151\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-17\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.998;exitY=0.299;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-8\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-1830\&quot; y=\&quot;110\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1830\&quot; y=\&quot;10\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1120\&quot; y=\&quot;10\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-1120\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-20\&quot; value=\&quot;十一子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-17\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.7809\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-8\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;刘义隆&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·文帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;424-453&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;元嘉&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1990\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-9\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;刘义符&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;宋·少帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;422-424&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;景平&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-2220\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-11\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-10\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-9\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-12\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-11\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0333\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-13\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.983;exitY=0.393;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-10\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-8\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-2330\&quot; y=\&quot;119\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-2270\&quot; y=\&quot;120\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-2270\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-2050\&quot; y=\&quot;20\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-2050\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-14\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-13\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.562\&quot; y=\&quot;-2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-10\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 20.800001px;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 20.800001px;&amp;quot;&amp;gt;刘裕&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;宋·武帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;420-422&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;永初&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-2450\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-27\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈霸先&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;陈·武帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;557-559&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;永定&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-38\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-28\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-29\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-43\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-38\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0182\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-28\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈蒨&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;陈·文帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;560-566&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;天嘉 天康&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2160\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-29\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈伯宗&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;陈·废帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;567-568&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;光大&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2390\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-39\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-30\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-31\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-45\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-39\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0047\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-30\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈顼&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;陈·宣帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;569-582&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;太建&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2620\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-31\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈叔宝&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;陈·后主&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.2px;&amp;quot;&amp;gt;583-589&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;至德 祯明&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2850\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-33\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-32\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-27\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-40\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-33\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0023\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-35\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-34\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;1820\&quot; y=\&quot;280\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1820\&quot; y=\&quot;280\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1875\&quot; y=\&quot;280\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1875\&quot; y=\&quot;120\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-41\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-35\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0007\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-32\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈文赞&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font&amp;gt;陈·太祖 (追)&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1700\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-36\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-34\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-28\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-42\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-36\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0026\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-37\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.998;exitY=0.396;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-34\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-30\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2560\&quot; y=\&quot;110\&quot; /&gt;\n              &lt;mxPoint x=\&quot;2560\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-44\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-37\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.5962\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-34\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;陈道谭&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;陈文赞·长子&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;-&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;70\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-53\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;350\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-54\&quot; value=\&quot;6年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2160\&quot; y=\&quot;350\&quot; width=\&quot;30\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-55\&quot; value=\&quot;短时\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2390\&quot; y=\&quot;350\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-56\&quot; value=\&quot;13年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2620\&quot; y=\&quot;350\&quot; width=\&quot;65\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-1\&quot; value=\&quot;\&quot; style=\&quot;group\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;800\&quot; width=\&quot;120\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-2\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=0;spacingTop=4;\&quot; parent=\&quot;JaGBqqWN3tGLt-_DGNlK-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;120\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-3\&quot; value=\&quot;47年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;JaGBqqWN3tGLt-_DGNlK-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry y=\&quot;20\&quot; width=\&quot;115\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-5\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;800\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-6\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;800\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-7\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;780\&quot; y=\&quot;800\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-8\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1240\&quot; y=\&quot;800\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-9\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1471\&quot; y=\&quot;800\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-10\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1700\&quot; y=\&quot;800\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-11\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;800\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;JaGBqqWN3tGLt-_DGNlK-12\&quot; value=\&quot;3年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2161\&quot; y=\&quot;800\&quot; width=\&quot;15\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-58\&quot; value=\&quot;6年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2850\&quot; y=\&quot;350\&quot; width=\&quot;30\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-63\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-2450\&quot; y=\&quot;190\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-64\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-2220\&quot; y=\&quot;190\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-65\&quot; value=\&quot;\&quot; style=\&quot;group\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1990\&quot; y=\&quot;190\&quot; width=\&quot;120\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-66\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=0;spacingTop=4;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-65\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;120\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-67\&quot; value=\&quot;29年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-65\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry y=\&quot;20\&quot; width=\&quot;25\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-68\&quot; value=\&quot;短时\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1760\&quot; y=\&quot;190\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-69\&quot; value=\&quot;11年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1530\&quot; y=\&quot;190\&quot; width=\&quot;55\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-70\&quot; value=\&quot;1年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1300\&quot; y=\&quot;190\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-71\&quot; value=\&quot;7年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1070\&quot; y=\&quot;190\&quot; width=\&quot;35\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-72\&quot; value=\&quot;5年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-840\&quot; y=\&quot;190\&quot; width=\&quot;25\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-73\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-610\&quot; y=\&quot;190\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-82\&quot; value=\&quot;\&quot; style=\&quot;group;fontColor=#7EA6E0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;976\&quot; y=\&quot;555\&quot; width=\&quot;180\&quot; height=\&quot;300\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-83\&quot; value=\&quot;\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=1 1;opacity=75;glass=0;shadow=0;treeFolding=0;enumerate=0;comic=0;arcSize=3;absoluteArcSize=0;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-82\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;180\&quot; height=\&quot;300\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-84\&quot; value=\&quot;&amp;lt;font style=&amp;quot;color: rgb(126, 166, 224);&amp;quot;&amp;gt;侯汉&amp;lt;/font&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=48;fontFamily=Helvetica;fontColor=#999999;textOpacity=60;\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-82\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;33.22\&quot; y=\&quot;30\&quot; width=\&quot;113.57\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-77\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;侯景&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;侯汉·开国皇帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;551-552&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;太始&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#e1d5e7;strokeColor=#9673a6;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1010\&quot; y=\&quot;690\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-94\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-85\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-86\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-99\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-94\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0069\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-96\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.999;exitY=0.602;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-85\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-88\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1885\&quot; y=\&quot;1120\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1885\&quot; y=\&quot;1290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-101\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-96\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0128\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-85\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧詧(chá)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;西梁·中宗&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;555-562&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;大定&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1710\&quot; y=\&quot;1060\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-95\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-86\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-87\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-104\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-95\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0156\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-86\&quot; value=\&quot;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧岿(kuī)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;西梁·世宗&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;562-585&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天保&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1940\&quot; y=\&quot;1060\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-87\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧琮&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;西梁·孝靖皇帝&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;585-587&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天保 广运&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2170\&quot; y=\&quot;1060\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-97\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-88\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-89\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-102\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-97\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0329\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-88\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 13px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;萧岩&amp;lt;/b&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;安平忠烈王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1940\&quot; y=\&quot;1240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-98\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FkpwvIiVEUr2vF3MQgcE-89\&quot; target=\&quot;FkpwvIiVEUr2vF3MQgcE-90\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-103\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;FkpwvIiVEUr2vF3MQgcE-98\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0287\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-89\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧璇&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;安平文宪王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2170\&quot; y=\&quot;1240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-90\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 13px; line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;萧铣&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;隋·梁·势力&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;618-621&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;凤鸣&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2400.5\&quot; y=\&quot;1240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-105\&quot; value=\&quot;7年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1710\&quot; y=\&quot;1169\&quot; width=\&quot;35\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-106\&quot; value=\&quot;23年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1940\&quot; y=\&quot;1169\&quot; width=\&quot;115\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-107\&quot; value=\&quot;2年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2170\&quot; y=\&quot;1169\&quot; width=\&quot;10\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FkpwvIiVEUr2vF3MQgcE-108\&quot; value=\&quot;3年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;2401\&quot; y=\&quot;1350\&quot; width=\&quot;15\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}"></div>
+
+<script>
+    // 页面加载完成后执行居中逻辑
+    window.addEventListener('load', centerGraphElement);
+    // 窗口大小改变时重新执行居中逻辑
+    window.addEventListener('resize', centerGraphElement);
+
+    /**
+     * 动态计算图表元素的上下左右居中位置,并通过定位样式实现。
+     */
+    function centerGraphElement() {
+        // 1. 获取包含图表的 DIV 元素 (mxgraph viewer 容器)
+        const graphDiv = document.querySelector('.mxgraph');
+        
+        if (!graphDiv) {
+            console.error('找不到类名为 "mxgraph" 的图表容器元素。');
+            return;
+        }
+
+        // 2. 将容器的父元素 (body) 设置为相对定位,以便子元素可以绝对定位
+        document.body.style.position = 'relative';
+        document.body.style.minHeight = '100vh'; // 确保 body 至少占满整个视口高度
+        
+        // 3. 应用绝对定位居中样式
+        graphDiv.style.position = 'absolute';
+        graphDiv.style.top = '50%';
+        graphDiv.style.left = '50%';
+        
+        // 4. 获取图表元素的实际宽度和高度
+        const elementWidth = graphDiv.offsetWidth;
+        const elementHeight = graphDiv.offsetHeight;
+
+        // 5. 使用 transform 属性将元素平移自身宽高的一半,实现真正的中心对齐
+        graphDiv.style.transform = `translate(-${elementWidth / 2}px, -${elementHeight / 2}px)`;
+
+        // 移除可能影响定位的 margin
+        graphDiv.style.margin = '0';
+    }
+</script>
+<!-- 字符串提示框 -->
+<div id="string-tooltip" class="string-tooltip"></div>
+
+<script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+
+<script type="text/javascript">
+
+// 字符串数据
+const stringData = {
+    '刘裕': {
+        title1: '刘裕',
+        title2: '(363 - 422)',
+        lines: ['宋武帝，开国皇帝；字：德舆', '东晋末期通过北伐（灭南燕、后秦）和诛除异己（如刘毅、司马休之）掌握军政大权，最终代晋建宋。在位期间，实施“土断”等改革，抑制豪强兼并，开创了短暂的“宋武之治”。']
+    },
+    '刘义符': {
+        title1: '刘义符',
+        title2: '(406 - 424)',
+        lines: ['宋武帝长子，宋少帝；小字：车兵', '继位后沉溺游乐，荒废朝政，不理政事。两年后，被徐羡之、傅亮、谢晦等辅政大臣以“不孝不君”的罪名废黜为营阳王，随后秘密派人将其杀害。']
+    },
+    '刘义隆': {
+        title1: '刘义隆',
+        title2: '(407 - 453)',
+        lines: ['宋武帝三子，宋文帝；字：车儿', '初被徐羡之等拥立，后诛杀权臣，亲理朝政。在位期间休养生息，文化繁荣，史称“元嘉之治”。多次发动北伐但均失败。最终因猜忌太子刘劭行巫蛊之事，反被刘劭联合二弟刘浚弑杀。']
+    },
+    '刘劭': {
+        title1: '刘劭',
+        title2: '(426 - 453)',
+        lines: ['宋文帝长子，弑父篡位；小字：休远', '因害怕巫蛊事件暴露，先发制人，率兵入宫弑杀父亲宋文帝，自立为帝。即位后，迅速被弟弟刘骏（孝武帝）起兵讨伐，仅在位三个月即兵败被俘，随后被刘骏以斩首示众的方式诛杀。']
+    },
+    '刘骏': {
+        title1: '刘骏',
+        title2: '(430 - 464)',
+        lines: ['宋文帝三子，宋孝武帝；字：休龙', '起兵讨伐并击败弑父的刘劭后即位。初年尚能理政，但后期猜忌严酷，大肆诛杀宗室和功臣，朝政日渐混乱。曾实行短暂的经济改革。']
+    },
+    '刘子业': {
+        title1: '刘子业',
+        title2: '(449 - 466)',
+        lines: ['宋孝武帝长子，宋前废帝；字：法师', '以暴虐荒淫著称，其残忍程度为南朝之最。曾强迫大臣与宫女淫乱，虐待叔父，公然杀戮。最终因其暴行激起内宫反叛，被寿寂之、姜产之等在华林园刺杀，死后被追废为临海王。']
+    },
+    '刘彧': {
+        title1: '刘彧',
+        title2: '(439 - 472)',
+        lines: ['宋文帝十一子，宋明帝；字：休炳', '在刘子业被杀后被拥立为帝。即位后平定了各地藩王的叛乱，但猜忌多疑，为保皇位大肆屠杀兄弟和宗室，导致人心离散。在位末期沉溺于奢侈享乐。']
+    },
+    '刘昱': {
+        title1: '刘昱',
+        title2: '(463 - 477)',
+        lines: ['宋明帝三子，宋后废帝；小字：慧震', '幼年即位，长大后性情暴躁，残忍好杀，常带着卫士在街上随意杀人。最终因行为暴虐威胁到权臣萧道成，被萧道成指使部将杨玉夫等趁夜刺杀。']
+    },
+    '刘准': {
+        title1: '刘准',
+        title2: '(469 - 479)',
+        lines: ['宋明帝三子，宋顺帝；字：仲谋', '在刘昱被杀后，被权臣萧道成拥立为帝，实为傀儡。年幼禅位予萧道成，宋朝灭亡，被封为汝阴王。禅位次年，被萧道成派人杀害。']
+    },
+    '萧道成': {
+        title1: '萧道成',
+        title2: '(427 - 482)',
+        lines: ['齐高帝，开国皇帝；字：绍伯', '刘宋末期重要将领，逐步掌握朝廷军政大权，最终代宋建齐。即位后崇尚节俭，与北魏维持和平，推行“检籍”以整顿户籍，对内安抚民生。']
+    },
+    '萧赜': {
+        title1: '萧赜',
+        title2: '(440 - 493)',
+        lines: ['齐高帝长子，齐武帝；字：宣远', '在位期间继续奉行节俭，国力强盛，社会安定，史称“永明之治”。他继续推行“检籍”制度，限制豪强。晚年对子侄猜忌较深。']
+    },
+    '萧昭业': {
+        title1: '萧昭业',
+        title2: '(474 - 494)',
+        lines: ['齐武帝之孙，郁林王；字：元尚', '即位后荒唐无度，不理朝政，生活奢侈，并与身边侍从淫乱。引起了辅政大臣萧鸾的不满和恐惧，最终被萧鸾以太后名义废黜，并随即派人将其杀害。']
+    },
+    '萧昭文': {
+        title1: '萧昭文',
+        title2: '(480 - 494)',
+        lines: ['齐武帝之孙，海陵王；字：季尚', '在萧昭业被废后，被权臣萧鸾拥立，实为傀儡。在位仅数月，被萧鸾废为海陵王。不久，萧鸾派人将其杀死，为自己篡位铺平道路。']
+    },
+    '萧鸾': {
+        title1: '萧鸾',
+        title2: '(452 - 498)',
+        lines: ['齐道生之子，齐明帝；字：景栖', '作为辅政大臣，先后废杀两任皇帝，最终篡位自立。即位后为清除隐患，对齐高帝和齐武帝的子孙进行了大规模的血腥诛杀，导致南齐宗室力量大为削弱。']
+    },
+    '萧宝卷': {
+        title1: '萧宝卷',
+        title2: '(483 - 501)',
+        lines: ['齐明帝三子，东昏侯；字：智藏', '以暴虐残忍和奢侈无道著称，滥杀忠良大臣，如萧懿、潘岳等，导致朝政大乱，激起地方将领叛乱。最终因宫廷政变，被叛将所杀，加速了南齐的灭亡。']
+    },
+    '萧宝融': {
+        title1: '萧宝融',
+        title2: '(488 - 502)',
+        lines: ['齐明帝八子，齐和帝；字：智昭', '在荆州被拥立为帝，与被杀的萧宝卷对立。最终战败，被权臣萧衍控制，被迫禅位于萧衍，南齐灭亡。禅位后不久被杀害。']
+    },
+    '萧整': {
+        title1: '萧整',
+        title2: '(不详)',
+        lines: ['南齐宗室', '文献记载极少，事迹不详。']
+    },
+    '萧隽': {
+        title1: '萧隽',
+        title2: '(不详)',
+        lines: ['南齐宗室', '事迹不详，可能指临汝公萧隽，在宗室诛杀中被杀。']
+    },
+    '萧承之': {
+        title1: '萧承之',
+        title2: '(?-447)',
+        lines: ['萧道成之父', '南齐建立后，被追尊为宣皇帝。']
+    },
+    '萧道生': {
+        title1: '萧道生',
+        title2: '(?-478)',
+        lines: ['萧道成之兄，萧鸾之父', '南齐建立后，被追尊为景皇。']
+    },
+    '萧长懋': {
+        title1: '萧长懋',
+        title2: '(458 - 493)',
+        lines: ['齐武帝长子，皇太子；字：宣慈', '齐武帝在位时的皇太子，因病早逝，未能即位。其子萧昭业和萧昭文先后继位，后被萧鸾取代。死后被追尊为文皇帝。']
+    },
+    '萧衍': {
+        title1: '萧衍',
+        title2: '(464 - 549)',
+        lines: ['梁武帝，开国皇帝；字：叔达', '南齐将领，因其兄萧懿被杀而起兵，代齐建梁。在位近五十年，早期励精图治，后期四次舍身入寺，沉迷佛教，荒废政事，导致国力衰退。最终在侯景之乱中，被围困于台城，活活饿死。']
+    },
+    '萧纲': {
+        title1: '萧纲',
+        title2: '(503 - 551)',
+        lines: ['梁武帝三子，梁简文帝；字：世缵', '著名的文学家，与父齐名。侯景之乱中，在建康被侯景拥立为帝，实为傀儡。侯景兵败前，派人将其毒杀。是南朝宫体诗的代表人物之一。']
+    },
+    '萧正德': {
+        title1: '萧正德',
+        title2: '(499 - 549)',
+        lines: ['梁武帝之侄/养子，临贺王', '因未能被立为太子，心怀怨恨。侯景之乱时，引侯景渡江，并被侯景拥立为傀儡皇帝。后因权力争执，被侯景废黜并杀害。']
+    },
+    '萧栋': {
+        title1: '萧栋',
+        title2: '(527 - 552)',
+        lines: ['萧统之子，豫章王；字：世遵', '在侯景自立为汉帝前，曾被侯景短暂拥立为南梁皇帝，以示代梁的过渡。侯景败后，被梁元帝萧绎派人捉住，最终被沉江杀害。']
+    },
+    '萧纪': {
+        title1: '萧纪',
+        title2: '(508 - 553)',
+        lines: ['梁武帝八子，武陵王；字：世询', '镇守巴蜀，在侯景之乱后自称皇帝，意图与梁元帝萧绎争夺天下。最终被萧绎联合西魏击败，在战场上身亡，其军队被吞并。']
+    },
+    '萧绎': {
+        title1: '萧绎',
+        title2: '(508 - 555)',
+        lines: ['梁武帝七子，梁元帝；字：世诚', '在侯景之乱中幸存，击败萧纪后于江陵称帝。为人多猜忌，因担心文人记载其过失，竟然焚毁了宫中十四万卷古籍。后被西魏军围攻，城破被俘，被西魏将领杀害。']
+    },
+    '萧渊明': {
+        title1: '萧渊明',
+        title2: '(519 - 556)',
+        lines: ['梁武帝之侄，贞阳侯；字：靖', '被北齐俘虏，后被北齐作为傀儡皇帝送回梁朝。与梁元帝萧绎争位失败，被萧绎幽禁并最终被杀。']
+    },
+    '萧方智': {
+        title1: '萧方智',
+        title2: '(540 - 558)',
+        lines: ['梁元帝九子，梁敬帝；字：慧相', '梁元帝被杀后，被陈霸先和王僧辩拥立为帝。后来实权尽归陈霸先，最终被迫禅位于陈霸先，南梁正式灭亡。']
+    },
+    '萧庄': {
+        title1: '萧庄',
+        title2: '(548 - 577)',
+        lines: ['梁元帝之孙，永嘉王；字：子宣', '梁末时在湘州被拥立。后在北齐的支持下于江陵称帝。陈朝建立后，被陈军击败，投奔北齐。其政权被视为南梁的延续之一。']
+    },
+    '萧鎋': {
+        title1: '萧鎋',
+        title2: '(不详)',
+        lines: ['南梁宗室', '事迹不详，文献记载极少，可能是梁武帝的某位封王。']
+    },
+    '萧副子': {
+        title1: '萧副子',
+        title2: '(不详)',
+        lines: ['南梁宗室', '事迹不详，文献记载极少，可能是梁武帝的某位亲属。']
+    },
+    '萧道赐': {
+        title1: '萧道赐',
+        title2: '(不详)',
+        lines: ['南梁宗室', '事迹不详，文献记载极少。']
+    },
+    '萧顺之': {
+        title1: '萧顺之',
+        title2: '(435 - 490)',
+        lines: ['萧衍之父；字：艺达', '南齐建立前的齐朝大臣，因军功受封。梁朝建立后，被追尊为太祖文皇帝。']
+    },
+    '萧懿': {
+        title1: '萧懿',
+        title2: '(461 - 500)',
+        lines: ['萧衍之兄；字：景达', '南齐重要将领，曾任尚书令。因功高震主，被昏君萧宝卷猜忌并杀害。其死讯成为萧衍起兵反齐，最终代齐建梁的直接导火索。']
+    },
+    '萧宏': {
+        title1: '萧宏',
+        title2: '(473 - 526)',
+        lines: ['萧衍之弟，临川靖惠王；字：宣达', '梁初的重要将领和辅政大臣，曾任大司马，是梁武帝最信任的亲属之一，为稳定政权做出贡献。']
+    },
+    '萧统': {
+        title1: '萧统',
+        title2: '(501 - 531)',
+        lines: ['梁武帝长子，昭明太子；字：德施', '品性贤良，才华横溢，主持编纂了著名的《昭明文选》。因溺水意外早逝，未能即位，是梁武帝晚年最大的遗憾之一。']
+    },
+    '萧欢': {
+        title1: '萧欢',
+        title2: '(528 - 550)',
+        lines: ['萧统之子，豫章王；字：世庆', '在侯景之乱中，与简文帝一同被侯景困在台城，城破后被侯景杀害。']
+    },
+    '萧方等': {
+        title1: '萧方等',
+        title2: '(534 - 555)',
+        lines: ['梁元帝长子', '江陵之战期间，随父梁元帝萧绎镇守江陵。在西魏围攻江陵时，战死于城下。']
+    },
+    '萧詧': {
+        title1: '萧詧',
+        title2: '(519 - 562)',
+        lines: ['萧统之子，西梁宣帝；字：世欣', '因与叔父梁元帝萧绎有矛盾，引西魏军攻破江陵，杀害萧绎，并在江陵建立西梁政权，依附于西魏、北周。']
+    },
+    '萧岿': {
+        title1: '萧岿',
+        title2: '(542 - 585)',
+        lines: ['萧詧之子，西梁明帝', '西梁第二代君主，继续在江陵割据，完全依附于北周和后来的隋朝。']
+    },
+    '萧琮': {
+        title1: '萧琮',
+        title2: '(558 - 607)',
+        lines: ['萧岿之子，西梁靖帝', '西梁末代君主，最终被隋文帝废除，西梁政权灭亡。']
+    },
+    '萧铣': {
+        title1: '萧铣',
+        title2: '(583 - 621)',
+        lines: ['梁元帝曾孙，隋末割据势力', '隋末唐初割据一方，恢复梁国号称帝，占有长江中游地区。后被唐高祖李渊派兵攻灭。']
+    },
+    '萧岩': {
+        title1: '萧岩',
+        title2: '(不详)',
+        lines: ['南梁宗室', '事迹不详，文献记载极少。']
+    },
+    '萧璇': {
+        title1: '萧璇',
+        title2: '(不详)',
+        lines: ['南梁宗室', '事迹不详，文献记载极少。']
+    },
+    '侯景': {
+        title1: '侯景',
+        title2: '(不详 - 552)',
+        lines: ['非皇族，发动侯景之乱的权臣', '原东魏将领，叛投南梁，后发动著名的侯景之乱，攻陷建康，俘虏梁武帝，对江南地区造成了毁灭性的破坏。最终被陈霸先、王僧辩联军击败，在逃亡中被杀。']
+    },
+    '陈霸先': {
+        title1: '陈霸先',
+        title2: '(503 - 559)',
+        lines: ['陈武帝，开国皇帝；字：兴国', '南梁将领，在侯景之乱中因平叛有功而崛起。击败侯景后，逐渐掌握梁朝大权，最终废梁敬帝萧方智自立为帝，建立陈朝。在位期间，励精图治，致力恢复江南经济和军事力量，稳定了南方的局势。']
+    },
+    '陈蒨': {
+        title1: '陈蒨',
+        title2: '(522 - 566)',
+        lines: ['陈武帝之侄，陈文帝；字：子华', '陈霸先的侄子，继位后积极进行军事行动，收复了被北朝占据的大片江土，扩大了陈朝的统治范围。他休养生息，重视吏治，使得陈朝国力达到鼎盛，史称“天嘉治世”。']
+    },
+    '陈伯宗': {
+        title1: '陈伯宗',
+        title2: '(554 - 570)',
+        lines: ['陈文帝长子，废帝', '陈文帝逝世后即位，因年幼无法亲政，朝政大权被叔父陈顼把持。最终被陈顼废黜，降为临海王，两年后被陈顼所杀害。']
+    },
+    '陈顼': {
+        title1: '陈顼',
+        title2: '(530 - 582)',
+        lines: ['陈武帝之侄，陈宣帝；字：绍世', '通过废黜侄子陈伯宗而篡位。在位期间曾组织大规模北伐，收复了淮南地区，一度振奋人心。但后期北伐失败，国力消耗，最终为陈朝的覆灭埋下隐患。']
+    },
+    '陈叔宝': {
+        title1: '陈叔宝',
+        title2: '(553 - 604)',
+        lines: ['陈宣帝长子，陈后主；字：元秀', '陈朝末代皇帝。即位后不理朝政，沉湎酒色，与妃嫔、文人饮宴赋诗，创作了著名的《玉树后庭花》。政治腐败，军事废弛，最终被隋朝军队攻破建康，被俘，陈朝灭亡。']
+    },
+    '陈道谭': {
+        title1: '陈道谭',
+        title2: '(525 - 555)',
+        lines: ['陈武帝之弟', '陈霸先之弟，在平定侯景之乱中立有大功，与陈霸先共同作战。早逝，被追封为始兴昭烈王。']
+    },
+    '陈文赞': {
+        title1: '陈文赞',
+        title2: '(479 - 548)',
+        lines: ['陈武帝之父', '陈霸先的父亲，为普通的梁朝地方官吏。陈朝建立后，被追尊为景帝。']
+    },
+};
+
+
+// 初始化悬停提示
+function initializeTooltips() {
+    const tooltip = document.getElementById('string-tooltip');
+    let currentTimeout = null;
+
+    setTimeout(() => {
+        const allElements = document.querySelectorAll('*');
+        
+        allElements.forEach(element => {
+            const textContent = element.textContent || element.innerText;
+            if (textContent && textContent.trim()) {
+                for (const targetString in stringData) {
+                    if (textContent.includes(targetString) && !element.querySelector('*')) {
+                        element.style.cursor = 'pointer';
+                        element.setAttribute('data-string', targetString);
+                        
+                        element.addEventListener('mouseenter', function(e) {
+                            const stringInfo = stringData[targetString];
+                            if (stringInfo) {
+                                if (currentTimeout) {
+                                    clearTimeout(currentTimeout);
+                                    currentTimeout = null;
+                                }
+                                
+                                let content = `<h4>${stringInfo.title1}</h4>`;
+                                if (stringInfo.title2) {
+                                    content += `<div class="title-line2">${stringInfo.title2}</div>`;
+                                }
+                                content += `<div class="title-separator"></div>`;
+                                stringInfo.lines.forEach(line => {
+                                    content += `<div class="info-line">${line}</div>`;
+                                });
+                                
+                                tooltip.innerHTML = content;
+                                
+                                const rect = element.getBoundingClientRect();
+                                let left = rect.left + (rect.width / 2) - 100;
+                                let top = rect.top - 15;
+                                
+                                if (left + 200 > window.innerWidth) {
+                                    left = window.innerWidth - 210;
+                                }
+                                if (left < 10) {
+                                    left = 10;
+                                }
+                                if (top < 10) {
+                                    top = rect.bottom + 15;
+                                }
+                                
+                                tooltip.style.left = left + 'px';
+                                tooltip.style.top = top + 'px';
+                                tooltip.style.display = 'block';
+                            }
+                        });
+                        
+                        element.addEventListener('mouseleave', function() {
+                            currentTimeout = setTimeout(() => {
+                                tooltip.style.display = 'none';
+                            }, 150);
+                        });
+                        
+                        break;
+                    }
+                }
+            }
+        });
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initializeTooltips, 2000);
+});
+
+if (document.readyState === 'complete') {
+    setTimeout(initializeTooltips, 2000);
+} else {
+    window.addEventListener('load', () => {
+        setTimeout(initializeTooltips, 2000);
+    });
+}
+</script>
+
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"99d25ba79c50c368","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.9.1","token":"e72945439c264b3b85d2e3b689102d27"}' crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
+
+
+<script>
+// =================== 修正版交互功能代码 ===================
+
+let currentScale = 1;
+let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let graphContainer = null;
+let isInitialized = false;
+
+function waitForDiagram() {
+    return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        function checkDiagram() {
+            attempts++;
+            const container = document.querySelector('.mxgraph');
+            const svg = document.querySelector('svg');
+            const canvas = document.querySelector('canvas');
+            
+            if (container || svg || canvas) {
+                console.log('找到图表容器');
+                resolve(container || svg || canvas);
+                return;
+            }
+            
+            if (attempts >= maxAttempts) {
+                console.warn('未找到图表容器,使用body');
+                resolve(document.body);
+                return;
+            }
+            
+            setTimeout(checkDiagram, 100);
+        }
+        
+        checkDiagram();
+    });
+}
+
+async function initializeInteractions() {
+    if (isInitialized) return;
+    
+    console.log('初始化交互功能...');
+    
+    try {
+        graphContainer = await waitForDiagram();
+        
+        if (!graphContainer) {
+            console.error('无法找到图表容器');
+            return;
+        }
+        
+        if (graphContainer.style) {
+            graphContainer.style.transformOrigin = 'center center';
+            graphContainer.style.cursor = 'grab';
+        }
+        
+        if (graphContainer.addEventListener) {
+            graphContainer.addEventListener('wheel', handleWheelZoom, { passive: false });
+            graphContainer.addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
+        
+        checkAndApplyTransform();
+        isInitialized = true;
+        console.log('交互功能初始化完成');
+        
+    } catch (error) {
+        console.error('初始化出错:', error);
+    }
+}
+
+function handleWheelZoom(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (!graphContainer || !isInitialized) return;
+    
+    const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
+    const oldScale = currentScale;
+    const newScale = oldScale * zoomFactor;
+    
+    if (newScale >= 0.1 && newScale <= 5.0) {
+        const rect = graphContainer.getBoundingClientRect();
+        const mouseRelToContainerX = event.clientX - rect.left;
+        const mouseRelToContainerY = event.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const mouseRelToCenterX = mouseRelToContainerX - centerX;
+        const mouseRelToCenterY = mouseRelToContainerY - centerY;
+        
+        const currentTransform = graphContainer.style.transform || '';
+        let translateX = 0;
+        let translateY = 0;
+        
+        const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+        if (translateMatch) {
+            translateX = parseFloat(translateMatch[1]);
+            translateY = parseFloat(translateMatch[2]);
+        }
+        
+        const scaleChange = newScale - oldScale;
+        const centerAdjustX = -mouseRelToCenterX * scaleChange / oldScale;
+        const centerAdjustY = -mouseRelToCenterY * scaleChange / oldScale;
+        
+        const finalTranslateX = translateX + centerAdjustX;
+        const finalTranslateY = translateY + centerAdjustY;
+        
+        graphContainer.style.transform = `translate(${finalTranslateX}px, ${finalTranslateY}px) scale(${newScale})`;
+        currentScale = newScale;
+    }
+}
+
+function handleMouseDown(event) {
+    if (!graphContainer || !isInitialized || event.button !== 0) return;
+    if (!graphContainer.contains(event.target)) return;
+    
+    event.preventDefault();
+    isDragging = true;
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+    
+    if (graphContainer.style) {
+        graphContainer.style.cursor = 'grabbing';
+    }
+}
+
+function handleMouseMove(event) {
+    if (!isDragging || !graphContainer || !isInitialized) return;
+    
+    event.preventDefault();
+    
+    const deltaX = event.clientX - lastMouseX;
+    const deltaY = event.clientY - lastMouseY;
+    
+    const currentTransform = graphContainer.style.transform || '';
+    let translateX = 0;
+    let translateY = 0;
+    let scale = 1;
+    
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    if (scaleMatch) {
+        scale = parseFloat(scaleMatch[1]);
+    } else {
+        scale = currentScale;
+    }
+    
+    translateX += deltaX;
+    translateY += deltaY;
+    
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+}
+
+function handleMouseUp() {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    if (graphContainer && graphContainer.style) {
+        graphContainer.style.cursor = 'grab';
+    }
+}
+
+function applyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    const currentTransform = graphContainer.style.transform || '';
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    
+    let translateX = 0;
+    let translateY = 0;
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+}
+
+function checkAndApplyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    const currentTransform = graphContainer.style.transform || '';
+    
+    if (currentTransform.includes('scale')) {
+        const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+        if (scaleMatch) {
+            currentScale = parseFloat(scaleMatch[1]);
+        }
+    }
+    
+    applyTransform();
+}
+
+function handleKeyboardShortcuts(event) {
+    if (!graphContainer || !isInitialized) return;
+
+    switch(event.key) {
+        case '+':
+        case '=':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.min(currentScale * 1.2, 5.0);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                }
+            }
+            break;
+            
+        case '-':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.max(currentScale * 0.8, 0.1);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                }
+            }
+            break;
+            
+        case '0':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                currentScale = 1;
+                graphContainer.style.transform = 'scale(1)';
+            }
+            break;
+    }
+}
+
+function resetView() {
+    if (!graphContainer || !isInitialized) return;
+    currentScale = 1;
+    graphContainer.style.transform = 'scale(1)';
+}
+
+document.addEventListener('keydown', handleKeyboardShortcuts);
+
+function smartInitialize() {
+    setTimeout(initializeInteractions, 1000);
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeInteractions, 2000);
+        });
+    }
+    
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!isInitialized) {
+                initializeInteractions();
+            }
+        }, 3000);
+    });
+    
+    let retryCount = 0;
+    const maxRetries = 10;
+    
+    function retryInit() {
+        if (!isInitialized && retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(() => {
+                initializeInteractions();
+                if (!isInitialized) {
+                    retryInit();
+                }
+            }, 2000);
+        }
+    }
+    
+    setTimeout(retryInit, 5000);
+}
+
+smartInitialize();
+
+window.resetView = resetView;
+window.setScale = (scale) => {
+    currentScale = Math.max(0.1, Math.min(5.0, scale));
+    applyTransform();
+};
+
+console.log('修正版交互功能脚本已加载');
+
+// 功能键JavaScript
+function goBack() {
+    try {
+        if (window.history.length > 1) {
+            window.history.back();
+        }
+        else if (document.referrer && document.referrer !== window.location.href) {
+            window.location.href = document.referrer;
+        }
+        else {
+            const choice = confirm('没有可返回的上一页。\n\n选择"确定"返回到上一页面\n选择"取消"刷新当前页面');
+            if (choice) {
+                window.history.go(-1);
+            } else {
+                window.location.reload();
+            }
+        }
+    } catch (error) {
+        console.log('返回操作失败,刷新页面');
+        window.location.reload();
+    }
+}
+
+window.addEventListener('load', function() {
+    if (document.referrer && document.referrer !== window.location.href) {
+        sessionStorage.setItem('previousPage', document.referrer);
+        console.log('记录来源页面:', document.referrer);
+    }
+});
+
+function improvedGoBack() {
+    const previousPage = sessionStorage.getItem('previousPage');
+    if (previousPage && previousPage !== window.location.href) {
+        window.location.href = previousPage;
+        return;
+    }
+    goBack();
+}
+
+function refreshPage() {
+    window.location.reload();
+}
+
+</script>

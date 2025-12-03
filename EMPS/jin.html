@@ -1,0 +1,906 @@
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>金</title>
+<meta charset="utf-8"/>
+<style>
+/* 字符串提示框样式 - 保持原有的悬停效果外观 */
+.string-tooltip {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    width: 200px;
+    z-index: 1000;
+    display: none;
+    pointer-events: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    line-height: 1.4;
+    white-space: normal;
+}
+
+.string-tooltip h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.string-tooltip .title-line2 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    font-weight: normal;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.string-tooltip .title-separator {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.string-tooltip .info-line {
+    margin: 4px 0;
+    display: block;
+    color: #ffffff;
+}
+
+/* 功能键样式 */
+.function-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.function-button {
+    width: 80px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.function-button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.function-button:active {
+    transform: translateY(0);
+}
+
+.back-button {
+    background-color: #8BA4AF;
+    /* 雾霾蓝 */
+}
+
+.refresh-button {
+    background-color: #E8D96F;
+    /* 雾霾黄 */
+    color: #333;
+}
+
+.function-button svg {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+}</style>
+</head>
+<body>
+<!-- 功能键 -->
+<div class="function-buttons">
+    <button class="function-button back-button" onclick="improvedGoBack()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        返回
+    </button>
+    <button class="function-button refresh-button" onclick="refreshPage()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        刷新
+    </button>
+</div>
+<div class="mxgraph" style="" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;target&quot;:&quot;self&quot;,&quot;lightbox&quot;:false,&quot;nav&quot;:true,&quot;dark-mode&quot;:&quot;light&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;Electron\&quot; agent=\&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36\&quot; version=\&quot;28.2.8\&quot;&gt;\n  &lt;diagram name=\&quot;第 1 页\&quot; id=\&quot;otVk7g7sL048PSS3A6mR\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;3890\&quot; dy=\&quot;1828\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;827\&quot; pageHeight=\&quot;1169\&quot; math=\&quot;1\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;line-height: 160%;&amp;quot; size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·晟 (吴乞买)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div&amp;gt;金·太宗&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;1123-1135&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;天会&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;spacing=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·乌雅束&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·康宗&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;女真·都勃极烈&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-340\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-59\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-24\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;50\&quot; y=\&quot;290\&quot; /&gt;\n              &lt;mxPoint x=\&quot;50\&quot; y=\&quot;60\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-62\&quot; value=\&quot;三子 (嫡长子)\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;WMNdyCvckb3y0wYxZsS8-59\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.5782\&quot; y=\&quot;-2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-60\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.98;exitY=0.396;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-55\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;40\&quot; y=\&quot;280\&quot; /&gt;\n              &lt;mxPoint x=\&quot;40\&quot; y=\&quot;-80\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-61\&quot; value=\&quot;庶长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;WMNdyCvckb3y0wYxZsS8-60\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6122\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-30\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-56\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;30\&quot; y=\&quot;265\&quot; /&gt;\n              &lt;mxPoint x=\&quot;30\&quot; y=\&quot;-220\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-32\&quot; value=\&quot;五子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-30\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6344\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-31\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.123;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-29\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;20\&quot; y=\&quot;252\&quot; /&gt;\n              &lt;mxPoint x=\&quot;20\&quot; y=\&quot;-360\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-33\&quot; value=\&quot;四子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-31\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6707\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·旻 (阿骨打)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;金·太祖&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;1115-1123&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;收国 天辅&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 150%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·亶 (合剌)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·熙宗 (闵宗)&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 150%;&amp;quot;&amp;gt;1135-1149&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天会 天眷 皇统&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;spacing=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 150%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·亮 (迪古乃)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·海陵王&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 15px;&amp;quot;&amp;gt;1149-1161&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;天德 贞元 正隆&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;spacing=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-47\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;_Wi_xNvqJJDl9gMKvilF-2\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-45\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-48\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-47\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.4771\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-51\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.001;exitY=0.594;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;_Wi_xNvqJJDl9gMKvilF-2\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;960\&quot; y=\&quot;299\&quot; /&gt;\n              &lt;mxPoint x=\&quot;960\&quot; y=\&quot;400\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1190\&quot; y=\&quot;400\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1190\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-52\&quot; value=\&quot;七子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-51\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6243\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-2\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·雍 (乌禄)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·世宗&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 15px;&amp;quot;&amp;gt;1161-1189&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;大定&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;780\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-3\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;line-height: 160%;&amp;quot; size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·璟 (麻达葛)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·章宗&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;1190-1208&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;大定&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1010\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·永济 (兴胜)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;金·卫绍王&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 19.199999px;&amp;quot;&amp;gt;1208-1213&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.199999px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;大安 崇庆 至宁&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=2;spacingBottom=2;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1240.5\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-55\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;_Wi_xNvqJJDl9gMKvilF-5\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-6\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-56\&quot; value=\&quot;三子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-55\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0421\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-5\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;line-height: 160%;&amp;quot; size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·珣 (吾睹补)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div&amp;gt;金·宣宗&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;1213-1224&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;贞祐 兴定 元光&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;spacing=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1470.5\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;_Wi_xNvqJJDl9gMKvilF-6\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;line-height: 160%;&amp;quot; size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·守绪 (宁甲速)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·哀宗&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;1224-1234&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;靖康&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1700.5\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;QY6Pp1sKWqIbaxVFctJ4-40\&quot; value=\&quot;18年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1010\&quot; y=\&quot;350\&quot; width=\&quot;90\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-5\&quot; value=\&quot;8年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-140\&quot; y=\&quot;351\&quot; width=\&quot;40\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-6\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·盈歌&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·穆宗&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-490\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-7\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·颇剌淑&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·肃宗&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-640\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-23\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-8\&quot; target=\&quot;hoRvMOoBcbo1f3_xZscG-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-670\&quot; y=\&quot;290\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-670\&quot; y=\&quot;360\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-370\&quot; y=\&quot;360\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-370\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-26\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-23\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.7509\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-24\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.999;exitY=0.605;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-8\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-680\&quot; y=\&quot;298\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-680\&quot; y=\&quot;380\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-200\&quot; y=\&quot;380\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-200\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-27\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-24\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.7165\&quot; y=\&quot;-2\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-25\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-8\&quot; target=\&quot;hoRvMOoBcbo1f3_xZscG-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-690\&quot; y=\&quot;310\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-690\&quot; y=\&quot;400\&quot; /&gt;\n              &lt;mxPoint x=\&quot;60\&quot; y=\&quot;400\&quot; /&gt;\n              &lt;mxPoint x=\&quot;60\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-28\&quot; value=\&quot;四子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-25\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.7905\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-8\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·劾里钵&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·世祖&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-790\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-38\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-24\&quot; target=\&quot;k6RN-u3AjEEVAVt-Xl67-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-39\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-38\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.4676\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-24\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·宗峻&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(绳果)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·景宣帝&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;220\&quot; y=\&quot;20\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-39\&quot; value=\&quot;1日\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;350\&quot; width=\&quot;5\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-40\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-55\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;490\&quot; y=\&quot;-80\&quot; /&gt;\n              &lt;mxPoint x=\&quot;490\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-41\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-40\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.1902\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-55\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·宗干&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(斡本)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·海陵王&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;220\&quot; y=\&quot;-120\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-42\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-56\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-2\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;720\&quot; y=\&quot;-220\&quot; /&gt;\n              &lt;mxPoint x=\&quot;720\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-43\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-42\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.3545\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-56\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·宗辅&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(讹里朵)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·睿宗 (追)&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;220\&quot; y=\&quot;-260\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-36\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-68\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-69\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-37\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-36\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0066\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-68\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·亨&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(孛迭)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·芮王&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;449.75\&quot; y=\&quot;-400\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-58\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;WMNdyCvckb3y0wYxZsS8-69\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-57\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1880\&quot; y=\&quot;-360\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1880\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-59\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-58\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.8191\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;WMNdyCvckb3y0wYxZsS8-69\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·羊蹄&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;color: rgb(51, 51, 51); line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·宗室&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;679.75\&quot; y=\&quot;-400\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-17\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-8\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-18\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-17\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0667\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-19\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.006;exitY=0.369;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-7\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-820\&quot; y=\&quot;280\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-820\&quot; y=\&quot;200\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-660\&quot; y=\&quot;200\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-660\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-20\&quot; value=\&quot;四子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-19\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6042\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-21\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-1\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-6\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;-830\&quot; y=\&quot;270\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-830\&quot; y=\&quot;180\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-520\&quot; y=\&quot;180\&quot; /&gt;\n              &lt;mxPoint x=\&quot;-520\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-22\&quot; value=\&quot;五子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-21\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.6934\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-1\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·乌古乃&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·景祖&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;平服·女真·各部&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-940\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-2\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-4\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-3\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-2\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.102\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-4\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·石鲁&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·昭祖&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1090\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-5\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-7\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-4\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-6\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-5\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0431\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-7\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·绥可&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·献祖&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1240\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-8\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-10\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-7\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-9\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-8\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0157\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-10\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·跋海&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·安皇帝&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1390\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-15\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-11\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-10\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-16\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-15\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-11\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·乌鲁&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·德皇帝&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1540\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-12\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-14\&quot; target=\&quot;IUtleTwVvTDojUhnEoIW-11\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-13\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-12\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.0157\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-14\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 150%;&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;b&amp;gt;(完颜) 函普&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·始祖&amp;lt;/span&amp;gt;&amp;amp;nbsp;(追)&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;生女真人&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 8px; line-height: 150%;&amp;quot;&amp;gt;或·渤海国·入赘·完颜部&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;spacing=0;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-1690\&quot; y=\&quot;250\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-34\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-29\&quot; target=\&quot;WMNdyCvckb3y0wYxZsS8-68\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-35\&quot; value=\&quot;之子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-34\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0289\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-29\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·宗弼&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(兀术)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·梁王&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;220\&quot; y=\&quot;-400\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-49\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-45\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-3\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-50\&quot; value=\&quot;次子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-49\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.4486\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-53\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.998;exitY=0.375;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;\&quot; parent=\&quot;1\&quot; source=\&quot;IUtleTwVvTDojUhnEoIW-45\&quot; target=\&quot;_Wi_xNvqJJDl9gMKvilF-5\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1420\&quot; y=\&quot;50\&quot; /&gt;\n              &lt;mxPoint x=\&quot;1420\&quot; y=\&quot;290\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-54\&quot; value=\&quot;长子\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-53\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.5148\&quot; y=\&quot;-1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-45\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·允恭&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;b&amp;gt;(胡土瓦)&amp;lt;br&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;div style=&amp;quot;line-height: 19.2px;&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;background-color: transparent; color: rgb(0, 0, 0);&amp;quot;&amp;gt;金·显宗 (追)&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;910\&quot; y=\&quot;20\&quot; width=\&quot;90\&quot; height=\&quot;80\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-57\&quot; value=\&quot;&amp;lt;div style=&amp;quot;line-height: 160%;&amp;quot;&amp;gt;&amp;lt;font style=&amp;quot;line-height: 160%;&amp;quot; size=&amp;quot;2&amp;quot;&amp;gt;&amp;lt;b&amp;gt;完颜·承麟 (呼敦)&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;div&amp;gt;金·末帝&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;font style=&amp;quot;font-size: 10px; line-height: 160%;&amp;quot;&amp;gt;1234-1234&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;lt;span style=&amp;quot;font-size: 10px;&amp;quot;&amp;gt;盛昌&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1930\&quot; y=\&quot;240\&quot; width=\&quot;120\&quot; height=\&quot;100\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-60\&quot; value=\&quot;10年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1701\&quot; y=\&quot;350\&quot; width=\&quot;50\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-61\&quot; value=\&quot;11年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1470.5\&quot; y=\&quot;350\&quot; width=\&quot;55\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-62\&quot; value=\&quot;5年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-25;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;1241\&quot; y=\&quot;350\&quot; width=\&quot;25\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-63\&quot; value=\&quot;\&quot; style=\&quot;group\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;780\&quot; y=\&quot;352\&quot; width=\&quot;120\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-64\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=0;spacingTop=4;\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-63\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;120\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-65\&quot; value=\&quot;28年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;IUtleTwVvTDojUhnEoIW-63\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry y=\&quot;20\&quot; width=\&quot;20\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-66\&quot; value=\&quot;12年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;550\&quot; y=\&quot;352\&quot; width=\&quot;60\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-67\&quot; value=\&quot;14年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;320\&quot; y=\&quot;352\&quot; width=\&quot;70\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;IUtleTwVvTDojUhnEoIW-68\&quot; value=\&quot;12年\&quot; style=\&quot;rounded=0;align=right;verticalAlign=middle;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;spacing=-30;spacingTop=4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;90\&quot; y=\&quot;351\&quot; width=\&quot;60\&quot; height=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-2\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 15px;&amp;quot;&amp;gt;土骨论部&amp;lt;/span&amp;gt;\&quot; style=\&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;spacing=0;spacingRight=-4;spacingBottom=-4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-931\&quot; y=\&quot;-65.5\&quot; width=\&quot;80\&quot; height=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-3\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 15px;&amp;quot;&amp;gt;统门部&amp;lt;/font&amp;gt;\&quot; style=\&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;spacing=0;spacingRight=-4;spacingBottom=-4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-875.5\&quot; y=\&quot;-6.5\&quot; width=\&quot;80\&quot; height=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-4\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 15px;&amp;quot;&amp;gt;耶悔部&amp;lt;/font&amp;gt;\&quot; style=\&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;spacing=0;spacingRight=-4;spacingBottom=-4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-875.5\&quot; y=\&quot;51.5\&quot; width=\&quot;80\&quot; height=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-7\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 15px;&amp;quot;&amp;gt;耶懒部&amp;lt;/span&amp;gt;\&quot; style=\&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;spacing=0;spacingRight=-4;spacingBottom=-4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-986.5\&quot; y=\&quot;-6.5\&quot; width=\&quot;80\&quot; height=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-8\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 15px;&amp;quot;&amp;gt;白山部&amp;lt;/font&amp;gt;\&quot; style=\&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;spacing=0;spacingBottom=-4;spacingRight=-4;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-986.5\&quot; y=\&quot;51.5\&quot; width=\&quot;80\&quot; height=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-9\&quot; value=\&quot;\&quot; style=\&quot;shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;\&quot; parent=\&quot;1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-890.27\&quot; y=\&quot;240\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;-890.5\&quot; y=\&quot;100\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;atX5tFW42oZ50-odOadI-10\&quot; value=\&quot;征服&amp;lt;div&amp;gt;收编&amp;lt;/div&amp;gt;\&quot; style=\&quot;edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=15;\&quot; parent=\&quot;atX5tFW42oZ50-odOadI-9\&quot; vertex=\&quot;1\&quot; connectable=\&quot;0\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0165\&quot; y=\&quot;1\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}"></div>
+
+<script>
+    // 页面加载完成后执行居中逻辑
+    window.addEventListener('load', centerGraphElement);
+    // 窗口大小改变时重新执行居中逻辑
+    window.addEventListener('resize', centerGraphElement);
+
+    /**
+     * 动态计算图表元素的上下左右居中位置，并通过定位样式实现。
+     */
+    function centerGraphElement() {
+        // 1. 获取包含图表的 DIV 元素 (mxgraph viewer 容器)
+        const graphDiv = document.querySelector('.mxgraph');
+        
+        if (!graphDiv) {
+            console.error('找不到类名为 "mxgraph" 的图表容器元素。');
+            return;
+        }
+
+        // 2. 将容器的父元素 (body) 设置为相对定位，以便子元素可以绝对定位
+        document.body.style.position = 'relative';
+        document.body.style.minHeight = '100vh'; // 确保 body 至少占满整个视口高度
+        
+        // 3. 应用绝对定位居中样式
+        graphDiv.style.position = 'absolute';
+        graphDiv.style.top = '50%';
+        graphDiv.style.left = '50%';
+        
+        // 4. 获取图表元素的实际宽度和高度
+        const elementWidth = graphDiv.offsetWidth;
+        const elementHeight = graphDiv.offsetHeight;
+
+        // 5. 使用 transform 属性将元素平移自身宽高的一半，实现真正的中心对齐
+        // 这一步是关键，它解决了 left: 50%; top: 50%; 只是将元素的左上角放在中心的问题。
+        graphDiv.style.transform = `translate(-${elementWidth / 2}px, -${elementHeight / 2}px)`;
+
+        // 移除可能影响定位的 margin
+        graphDiv.style.margin = '0';
+    }
+</script>
+<!-- 字符串提示框 -->
+<div id="string-tooltip" class="string-tooltip"></div>
+
+<script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+
+<script type="text/javascript">
+
+// 字符串数据
+const stringData = {
+    '完颜·晟': {
+        title1: '完颜·吴乞买',
+        title2: '(1075年-1135年)',
+        lines: ['金太宗，太祖阿骨打之弟，金朝第二位皇帝', '1123年-1135年在位，延续灭辽事业并彻底消灭北宋', '彻底消灭辽国，制造靖康之役，迁徙北宋君臣北返', '扩张金朝疆域，为金朝入主中原奠定坚实基础']
+    },
+    '完颜·乌雅束': {
+        title1: '完颜·乌雅束',
+        title2: '(1061年-1113年)',
+        lines: ['金康宗，世祖劾里钵长子，太祖阿骨打之兄', '1103年-1113年在位，继续女真部落联盟统一事业', '巩固完颜部联盟地位，为金朝建国事业奠定基础', '承上启下的重要人物，推动女真民族统一进程']
+    },
+    '完颜·旻': {
+        title1: '完颜·阿骨打',
+        title2: '(1068年8月1日-1123年9月19日)',
+        lines: ['金太祖，完颜部酋长，金朝开国皇帝', '1115年建立金朝，在位8年完成建国大业和灭辽战争', '统一女真各部，建立金朝，灭亡辽国确立东北亚格局', '女真民族英雄，金朝奠基者，奠定东北亚政治格局']
+    },
+    '完颜·亶': {
+        title1: '完颜·亶',
+        title2: '(1119年8月14日-1150年1月9日)',
+        lines: ['金熙宗，太祖嫡长孙，景宣帝宗峻长子', '1135年-1150年在位，完善金朝政治制度和汉化政策', '推行汉化改革政策，废除部落制建立中央集权制', '推动金朝汉化进程，促进民族融合和文化交流']
+    },
+    '完颜·亮': {
+        title1: '完颜·亮',
+        title2: '(1122年2月24日-1161年12月15日)',
+        lines: ['金废帝，海陵王，太祖庶长孙宗干次子', '1150年-1161年在位，迁都燕京并发动南侵南宋战争', '迁都中都燕京，改革政治制度，发动侵宋战争失败', '有争议的改革者，推动汉化但手段残酷结局悲惨']
+    },
+    '完颜·雍': {
+        title1: '完颜·雍',
+        title2: '(1123年3月1日-1189年1月20日)',
+        lines: ['金世宗，太祖之孙，宗辅之子，人称小尧舜', '1161年-1189年在位，开创大定盛世政治清明经济繁荣', '与民休息推行仁政，政治清明经济繁荣文化昌盛', '金朝最杰出皇帝之一，北方社会稳定发展的重要时期']
+    },
+    '完颜·璟': {
+        title1: '完颜·璟',
+        title2: '(1168年8月31日-1208年12月29日)',
+        lines: ['金章宗，世宗之孙，显宗允恭之子', '1189年-1208年在位，开创明昌之治崇尚汉文化', '崇尚汉文化推动书法艺术发展，开创金朝文化黄金时代', '金朝文化发展高峰，但后期政治腐败国势由盛转衰']
+    },
+    '完颜·永济': {
+        title1: '完颜·永济',
+        title2: '(？-1213年9月11日)',
+        lines: ['金卫绍王，世宗第七子，章宗之叔父', '1208年-1213年在位，面临蒙古威胁政治腐败时期', '软弱无能政治腐败，被臣下胡沙虎弑杀', '金朝衰落象征，蒙古威胁加剧统治危机四伏']
+    },
+    '完颜·珣': {
+        title1: '完颜·珣',
+        title2: '(1163年4月18日-1224年1月14日)',
+        lines: ['金宣宗，世宗长孙，章宗异母兄', '1213年-1224年在位，蒙古入侵时期南迁汴京避祸', '南迁汴京避蒙古，放弃中都，国力衰微疆域日蹙', '金朝衰落转折点，失去北方大片疆土走向没落']
+    },
+    '完颜·守绪': {
+        title1: '完颜·守绪',
+        title2: '(1198年9月25日-1234年2月9日)',
+        lines: ['金哀宗，宣宗之子，金朝第九位皇帝', '1224年-1234年在位，面临蒙宋联军围攻励精图治', '励精图治改革政治军事，但大势已去最终自缢殉国', '末代有为之君，展现女真民族气节和抗争精神']
+    },
+    '完颜·盈歌': {
+        title1: '完颜·盈歌',
+        title2: '(1053年-1103年)',
+        lines: ['金穆宗，景祖乌古乃第五子，世祖之弟', '1094年-1103年继续统一女真各部扩张部落联盟', '巩固完颜部地位，延续扩张事业为建国奠定基础', '女真统一进程中的重要领袖，推动部落联盟发展']
+    },
+    '完颜·颇剌淑': {
+        title1: '完颜·颇剌淑',
+        title2: '(？-1094年)',
+        lines: ['金肃宗，景祖乌古乃第四子', '1092年-1094年在位，短期执政承前启后', '继承部落联盟事业继续发展但英年早逝', '承前启后的过渡人物，为女真统一做出贡献']
+    },
+    '完颜·劾里钵': {
+        title1: '完颜·劾里钵',
+        title2: '(1039年-1092年)',
+        lines: ['金世祖，景祖乌古乃次子', '1074年-1092年在位，统一女真各部重要时期', '扩张女真疆域征服周边部落，为建国奠定坚实基础', '女真民族统一重要推动者，部落联盟发展奠基人']
+    },
+    '完颜·宗峻': {
+        title1: '完颜·宗峻',
+        title2: '(？-1135年)',
+        lines: ['景宣帝，太祖嫡长子，熙宗之父', '未及即位早逝，但其子完颜亶继承皇位', '为金朝政治制度建设奠定重要基础和理论准备', '金朝政治传承重要一环，皇位世袭制奠基者']
+    },
+    '完颜·宗干': {
+        title1: '完颜·宗干',
+        title2: '(？-1141年)',
+        lines: ['太师，太祖庶长子，完颜亮之父', '辅佐朝政培养人才，为完颜亮继位奠定基础', '推动汉化政策实施，为金朝政治发展贡献力量', '金朝政治改革重要推动者，汉化政策倡导者']
+    },
+    '完颜·宗辅': {
+        title1: '完颜·宗辅',
+        title2: '(？-1135年)',
+        lines: ['金睿宗，太祖第三子，世宗之父', '南征北战为金朝扩张立下汗马功劳', '军事才能出众战功卓著，为金朝开疆拓土', '金朝军事扩张重要将领，开国功臣之一']
+    },
+    '完颜·宗弼': {
+        title1: '完颜·宗弼',
+        title2: '(？-1148年)',
+        lines: ['金需要，太祖第四子，著名军事家', '1129年率军渡江追击赵构，威震南宋朝野', '金朝最杰出军事家，多次击败宋军战功显赫', '金朝军事史上的传奇人物，女真军事天才']
+    },
+    '完颜·亨': {
+        title1: '完颜·亨',
+        title2: '(？-1142年)',
+        lines: ['金吴王，太祖庶子', '跟随阿骨打征伐四方，为金朝建国立下战功', '忠诚勇猛作战勇敢，为金朝开国立下不朽功勋', '金朝开国功臣之一，女真勇士典型代表']
+    },
+    '完颜·羊蹄': {
+        title1: '完颜·羊蹄',
+        title2: '(生卒年不详)',
+        lines: ['金朝宗室成员，太祖庶子', '参与金朝早期政治活动和军事征伐', '参与金朝早期政治活动为部落联盟发展效力', '金朝宗室政治参与者，女真贵族政治代表']
+    },
+    '完颜·乌古乃': {
+        title1: '完颜·乌古乃',
+        title2: '(1020年-1074年)',
+        lines: ['金景祖，女真完颜部始祖', '创建完颜部联盟，女真民族统一的重要奠基人', '奠定女真部落联盟基础，推动民族融合发展', '女真民族联盟的奠基者，部落统一事业开创者']
+    },
+    '完颜·石鲁': {
+        title1: '完颜·石鲁',
+        title2: '(生卒年不详)',
+        lines: ['景祖之父，乌古乃祖父', '女真部落早期发展时期的重要领袖人物', '为完颜部发展奠定基础，推动社会进步', '女真民族发展重要先祖，部落文明奠基者']
+    },
+    '完颜·绥可': {
+        title1: '完颜·绥可',
+        title2: '(生卒年不详)',
+        lines: ['完颜部早期重要人物', '女真部落发展时期的重要推动者和组织者', '推动女真社会进步，为部落联盟形成做出贡献', '女真民族早期发展功臣，部落文明推动者']
+    },
+    '完颜·跋海': {
+        title1: '完颜·跋海',
+        title2: '(生卒年不详)',
+        lines: ['女真部落联盟早期领袖', '加强部落间联系，推动联盟形成和发展', '促进女真各部团结，为统一事业奠定基础', '女真联盟形成重要推动者，民族团结先驱']
+    },
+    '完颜·乌鲁': {
+        title1: '完颜·乌鲁',
+        title2: '(生卒年不详)',
+        lines: ['德帝，函普长子', '女真部落早期发展，继承先祖事业并光大', '继承函普事业，推动部落发展和民族融合', '女真部落传承重要人物，氏族发展推动者']
+    },
+    '函普': {
+        title1: '函普',
+        title2: '(10世纪)',
+        lines: ['金朝始祖，女真完颜氏族领袖', '创建完颜部，女真民族起源和部落联盟创始人', '从高丽来到女真地区，创建部落奠定民族基础', '女真民族始祖，金朝血脉源头，民族复兴奠基人']
+    },
+    '完颜·允恭': {
+        title1: '完颜·允恭',
+        title2: '(？-1185年)',
+        lines: ['金显宗，世宗之子，章宗之父', '未及即位早逝，但其子完颜璟继承皇位', '为金朝政治传承做出重要贡献，培养合格继承人', '金朝皇位传承重要一环，盛世延续关键人物']
+    },
+    '完颜·承麟': {
+        title1: '完颜·承麟',
+        title2: '(？-1234年2月9日)',
+        lines: ['金末帝，完颜亨之孙，金朝最后一位皇帝', '1234年在位不足半天，中国历史上在位时间最短皇帝', '蔡州城破前夕即位，立即披甲上阵战死沙场马革裹尸', '金朝最后象征，体现女真勇士精神和宁死不屈品格']
+    },
+    '土骨论部': {
+        title1: '生女真',
+        title2: '辽代至金代',
+        lines: ['女真族中较重要的生女真部落，保持原始生活方式', '受辽朝控制较少，保持相对独立性', '构成女真族主体力量，为金朝建立提供基础', '随完颜部统一并入金朝']
+    },
+    '耶懒部': {
+        title1: '熟女真',
+        title2: '今俄罗斯帕尔季赞斯克河流域',
+        lines: ['受辽朝控制或影响较深的部落，生活方式相对汉化', '与辽朝有更多政治、经济和文化交流', '完颜保活里部属，最早最坚决支持完颜部', '又称耶懒路，金初置耶懒路管理机构']
+    },
+    '白山部': {
+        title1: '生女真',
+        title2: '长白山地区',
+        lines: ['活跃在长白山区域的女真部落，地势险要，资源丰富', '生女真部落中较有实力和独立性的部落', '11世纪中叶景祖乌古乃时期重要的联盟部落', '长白山地区是女真人发祥地之一']
+    },
+    '统门部': {
+        title1: '生女真',
+        title2: '东北地区',
+        lines: ['生女真部落，保持相对独立的部落结构', '在辽末金初的崛起过程中是重要力量', '完颜部联合对抗辽朝的重要盟友', '与土骨论、白山等部落一同构成女真族主要力量']
+    },
+    '耶悔部': {
+        title1: '生女真',
+        title2: '东北地区',
+        lines: ['生女真部落，保持相对独立的部落结构和传统生活方式', '与完颜部关系密切的重要盟友', '11世纪中叶景祖乌古乃时期联盟的重要组成部分', '构成完颜部崛起基础的生女真部落之一']
+    },
+};
+
+
+// 等待页面和mxgraph完全加载 - 使用更谨慎的初始化方式
+function initializeTooltips() {
+    const tooltip = document.getElementById('string-tooltip');
+    let currentTimeout = null;
+
+    // 等待mxgraph渲染完成 - 增加延迟以避免与居中功能冲突
+    setTimeout(() => {
+        // 查找所有包含目标字符串的元素
+        const allElements = document.querySelectorAll('*');
+        
+        allElements.forEach(element => {
+            const textContent = element.textContent || element.innerText;
+            if (textContent && textContent.trim()) {
+                // 检查是否包含目标字符串
+                for (const targetString in stringData) {
+                    if (textContent.includes(targetString) && !element.querySelector('*')) {
+                        // 确保这是一个叶子节点（没有子元素）
+                        element.style.cursor = 'pointer';
+                        element.setAttribute('data-string', targetString);
+                        
+                        element.addEventListener('mouseenter', function(e) {
+                            const stringInfo = stringData[targetString];
+                            if (stringInfo) {
+                                // 清除可能存在的隐藏定时器
+                                if (currentTimeout) {
+                                    clearTimeout(currentTimeout);
+                                    currentTimeout = null;
+                                }
+                                
+                                // 构建提示内容
+                                let content = `<h4>${stringInfo.title1}</h4>`;
+                                if (stringInfo.title2) {
+                                    content += `<div class="title-line2">${stringInfo.title2}</div>`;
+                                }
+                                content += `<div class="title-separator"></div>`;
+                                stringInfo.lines.forEach(line => {
+                                    content += `<div class="info-line">${line}</div>`;
+                                });
+                                
+                                tooltip.innerHTML = content;
+                                
+                                // 计算提示框位置 - 使用更安全的方法
+                                const rect = element.getBoundingClientRect();
+                                
+                                let left = rect.left + (rect.width / 2) - 100; // 居中显示
+                                let top = rect.top - 15; // 在元素上方显示
+                                
+                                // 确保提示框不超出页面边界
+                                if (left + 200 > window.innerWidth) {
+                                    left = window.innerWidth - 210;
+                                }
+                                if (left < 10) {
+                                    left = 10;
+                                }
+                                if (top < 10) {
+                                    top = rect.bottom + 15; // 如果上方空间不够，显示在下方
+                                }
+                                
+                                tooltip.style.left = left + 'px';
+                                tooltip.style.top = top + 'px';
+                                tooltip.style.display = 'block';
+                            }
+                        });
+                        
+                        element.addEventListener('mouseleave', function() {
+                            // 添加延迟隐藏，避免鼠标快速移动时闪烁
+                            currentTimeout = setTimeout(() => {
+                                tooltip.style.display = 'none';
+                            }, 150);
+                        });
+                        
+                        break; // 找到匹配的字符串后跳出循环
+                    }
+                }
+            }
+        });
+    }, 3000); // 增加延迟时间，确保居中功能完成
+}
+
+// 页面加载完成后初始化 - 避免干扰已有的居中逻辑
+document.addEventListener('DOMContentLoaded', function() {
+    // 延迟初始化，避免与现有的居中功能冲突
+    setTimeout(initializeTooltips, 2000);
+});
+
+// 额外的保护：确保在所有脚本加载完成后再初始化
+if (document.readyState === 'complete') {
+    setTimeout(initializeTooltips, 2000);
+} else {
+    window.addEventListener('load', () => {
+        setTimeout(initializeTooltips, 2000);
+    });
+}
+</script>
+
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"99b66618b80de05a","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.9.1","token":"e72945439c264b3b85d2e3b689102d27"}' crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
+
+
+<script>
+// =================== 修正版交互功能代码 ===================
+
+// 全局变量
+let currentScale = 1;
+let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let graphContainer = null;
+let isInitialized = false;
+
+// 等待draw.io图表渲染完成
+function waitForDiagram() {
+    return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50; // 最多等待5秒
+        
+        function checkDiagram() {
+            attempts++;
+            
+            // 尝试多种方式找到图表容器
+            const container = document.querySelector('.mxgraph');
+            const svg = document.querySelector('svg');
+            const canvas = document.querySelector('canvas');
+            
+            if (container || svg || canvas) {
+                console.log('找到图表容器:', { container, svg, canvas });
+                resolve(container || svg || canvas);
+                return;
+            }
+            
+            if (attempts >= maxAttempts) {
+                console.warn('未找到图表容器，使用body作为容器');
+                resolve(document.body);
+                return;
+            }
+            
+            setTimeout(checkDiagram, 100);
+        }
+        
+        checkDiagram();
+    });
+}
+
+// 初始化交互功能
+async function initializeInteractions() {
+    if (isInitialized) {
+        console.log('交互功能已经初始化过了');
+        return;
+    }
+    
+    console.log('开始初始化交互功能...');
+    
+    try {
+        // 等待图表加载完成
+        graphContainer = await waitForDiagram();
+        
+        if (!graphContainer) {
+            console.error('无法找到图表容器');
+            return;
+        }
+        
+        console.log('图表容器:', graphContainer);
+        
+        // 为容器添加必要的样式
+        if (graphContainer.style) {
+            graphContainer.style.transformOrigin = 'center center';
+            graphContainer.style.cursor = 'grab';
+        }
+        
+        // 添加滚轮事件监听器（防止默认行为）
+        if (graphContainer.addEventListener) {
+            graphContainer.addEventListener('wheel', handleWheelZoom, { passive: false });
+            
+            // 添加鼠标事件监听器
+            graphContainer.addEventListener('mousedown', handleMouseDown);
+            
+            // 为整个文档添加鼠标移动和释放事件
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+            console.log('事件监听器添加完成');
+        }
+        
+        // 检查是否已经有初始的transform
+        checkAndApplyTransform();
+        
+        isInitialized = true;
+        console.log('交互功能初始化完成');
+        
+    } catch (error) {
+        console.error('初始化交互功能时出错:', error);
+    }
+}
+
+// 最精确的滚轮缩放处理函数 - 以鼠标位置为中心缩放
+function handleWheelZoom(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (!graphContainer || !isInitialized) return;
+    
+    console.log('滚轮缩放事件 (最精确版):', event.deltaY, '鼠标位置:', event.clientX, event.clientY);
+    
+    // 获取缩放因子
+    const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
+    
+    // 计算新缩放值
+    const oldScale = currentScale;
+    const newScale = oldScale * zoomFactor;
+    
+    // 限制缩放范围
+    if (newScale >= 0.1 && newScale <= 5.0) {
+        // 获取图表的屏幕位置信息
+        const rect = graphContainer.getBoundingClientRect();
+        const containerLeft = rect.left;
+        const containerTop = rect.top;
+        const containerWidth = rect.width;
+        const containerHeight = rect.height;
+        
+        // 计算鼠标相对于图表容器的坐标
+        const mouseRelToContainerX = event.clientX - containerLeft;
+        const mouseRelToContainerY = event.clientY - containerTop;
+        
+        console.log('容器信息:', { left: containerLeft, top: containerTop, width: containerWidth, height: containerHeight });
+        console.log('鼠标相对容器:', { x: mouseRelToContainerX, y: mouseRelToContainerY });
+        
+        // 将鼠标位置转换为相对于图表内容中心的坐标
+        // 图表内容中心在容器中心
+        const centerX = containerWidth / 2;
+        const centerY = containerHeight / 2;
+        
+        // 鼠标相对于图表中心的坐标
+        const mouseRelToCenterX = mouseRelToContainerX - centerX;
+        const mouseRelToCenterY = mouseRelToContainerY - centerY;
+        
+        // 获取当前transform
+        const currentTransform = graphContainer.style.transform || '';
+        
+        // 提取当前的translate值
+        let translateX = 0;
+        let translateY = 0;
+        
+        const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+        
+        if (translateMatch) {
+            translateX = parseFloat(translateMatch[1]);
+            translateY = parseFloat(translateMatch[2]);
+        }
+        
+        // 缩放补偿算法：
+        // 鼠标位置应该在缩放后保持不变
+        // 如果鼠标在图表中心向右10px，向上5px
+        // 缩放2倍后，鼠标应该在图表中心向右20px，向上10px
+        // 所以我们需要调整translate来补偿这个位移
+        const scaleChange = newScale - oldScale;
+        const centerAdjustX = -mouseRelToCenterX * scaleChange / oldScale;
+        const centerAdjustY = -mouseRelToCenterY * scaleChange / oldScale;
+        
+        // 应用新的变换
+        const finalScale = newScale;
+        const finalTranslateX = translateX + centerAdjustX;
+        const finalTranslateY = translateY + centerAdjustY;
+        
+        graphContainer.style.transform = `translate(${finalTranslateX}px, ${finalTranslateY}px) scale(${finalScale})`;
+        
+        currentScale = finalScale;
+        
+        console.log(`缩放完成: ${(currentScale * 100).toFixed(0)}%`);
+        console.log('相对中心坐标:', { x: mouseRelToCenterX, y: mouseRelToCenterY });
+        console.log('缩放补偿:', { x: centerAdjustX, y: centerAdjustY });
+        console.log('最终变换:', { tx: finalTranslateX, ty: finalTranslateY, scale: finalScale });
+    }
+}
+
+// 鼠标按下处理函数
+function handleMouseDown(event) {
+    if (!graphContainer || !isInitialized) return;
+    
+    // 只响应左键点击
+    if (event.button !== 0) return;
+    
+    // 检查是否点击在图表容器上
+    if (!graphContainer.contains(event.target)) return;
+    
+    console.log('鼠标按下事件');
+    
+    event.preventDefault();
+    isDragging = true;
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+    
+    if (graphContainer.style) {
+        graphContainer.style.cursor = 'grabbing';
+    }
+}
+
+// 鼠标移动处理函数
+function handleMouseMove(event) {
+    if (!isDragging || !graphContainer || !isInitialized) return;
+    
+    console.log('鼠标移动事件');
+    
+    event.preventDefault();
+    
+    // 计算鼠标移动距离
+    const deltaX = event.clientX - lastMouseX;
+    const deltaY = event.clientY - lastMouseY;
+    
+    // 获取当前的transform
+    const currentTransform = graphContainer.style.transform || '';
+    console.log('当前transform:', currentTransform);
+    
+    // 提取当前的translate值
+    let translateX = 0;
+    let translateY = 0;
+    let scale = 1;
+    
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    if (scaleMatch) {
+        scale = parseFloat(scaleMatch[1]);
+    } else {
+        scale = currentScale;
+    }
+    
+    // 更新位置
+    translateX += deltaX;
+    translateY += deltaY;
+    
+    // 应用新的transform
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+}
+
+// 鼠标释放处理函数
+function handleMouseUp() {
+    if (!isDragging) return;
+    
+    console.log('鼠标释放事件');
+    
+    isDragging = false;
+    
+    if (graphContainer && graphContainer.style) {
+        graphContainer.style.cursor = 'grab';
+    }
+}
+
+// 应用变换函数
+function applyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    const currentTransform = graphContainer.style.transform || '';
+    
+    // 如果已经有translate，保留它
+    const translateMatch = currentTransform.match(/translate\s*\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\)/);
+    
+    let translateX = 0;
+    let translateY = 0;
+    
+    if (translateMatch) {
+        translateX = parseFloat(translateMatch[1]);
+        translateY = parseFloat(translateMatch[2]);
+    }
+    
+    graphContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+    console.log('应用变换:', `translate(${translateX}px, ${translateY}px) scale(${currentScale})`);
+}
+
+// 检查并应用初始transform
+function checkAndApplyTransform() {
+    if (!graphContainer || !isInitialized) return;
+    
+    // 如果容器已经有了transform，尝试解析其scale值
+    const currentTransform = graphContainer.style.transform || '';
+    
+    if (currentTransform.includes('scale')) {
+        const scaleMatch = currentTransform.match(/scale\s*\(\s*([\d.]+)\s*\)/);
+        if (scaleMatch) {
+            currentScale = parseFloat(scaleMatch[1]);
+            console.log('检测到已有scale:', currentScale);
+        }
+    }
+    
+    applyTransform();
+}
+
+// 键盘快捷键支持
+function handleKeyboardShortcuts(event) {
+    if (!graphContainer || !isInitialized) return;
+
+    switch(event.key) {
+        case '+':
+        case '=':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.min(currentScale * 1.2, 5.0);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                    console.log(`键盘缩放至: ${(currentScale * 100).toFixed(0)}%`);
+                }
+            }
+            break;
+            
+        case '-':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                const newScale = Math.max(currentScale * 0.8, 0.1);
+                if (newScale !== currentScale) {
+                    currentScale = newScale;
+                    applyTransform();
+                    console.log(`键盘缩放至: ${(currentScale * 100).toFixed(0)}%`);
+                }
+            }
+            break;
+            
+        case '0':
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                currentScale = 1;
+                // 移除所有translate
+                graphContainer.style.transform = 'scale(1)';
+                console.log('重置视图');
+            }
+            break;
+    }
+}
+
+// 重置函数
+function resetView() {
+    if (!graphContainer || !isInitialized) return;
+    
+    currentScale = 1;
+    graphContainer.style.transform = 'scale(1)';
+    console.log('视图已重置');
+}
+
+// 添加键盘事件监听
+document.addEventListener('keydown', handleKeyboardShortcuts);
+
+// ================ 智能初始化逻辑 ================
+
+// 延迟初始化策略
+function smartInitialize() {
+    console.log('开始智能初始化...');
+    
+    // 策略1: 立即尝试初始化
+    setTimeout(initializeInteractions, 1000);
+    
+    // 策略2: 页面加载完成后再次尝试
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeInteractions, 2000);
+        });
+    }
+    
+    // 策略3: 窗口加载完成后最后尝试
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!isInitialized) {
+                console.log('使用备用初始化策略...');
+                initializeInteractions();
+            }
+        }, 3000);
+    });
+    
+    // 策略4: 定时重试机制
+    let retryCount = 0;
+    const maxRetries = 10;
+    
+    function retryInit() {
+        if (!isInitialized && retryCount < maxRetries) {
+            retryCount++;
+            console.log(`重试初始化 (${retryCount}/${maxRetries})...`);
+            setTimeout(() => {
+                initializeInteractions();
+                if (!isInitialized) {
+                    retryInit();
+                }
+            }, 2000);
+        }
+    }
+    
+    // 5秒后开始重试
+    setTimeout(retryInit, 5000);
+}
+
+// 启动智能初始化
+smartInitialize();
+
+// 导出功能供调试
+window.resetView = resetView;
+window.setScale = (scale) => {
+    currentScale = Math.max(0.1, Math.min(5.0, scale));
+    applyTransform();
+};
+
+console.log('修正版交互功能脚本已加载');
+
+// 功能键JavaScript
+function goBack() {
+    // 尝试多种返回方式
+    try {
+        // 方式1：尝试history.back()
+        if (window.history.length > 1) {
+            window.history.back();
+        }
+        // 方式2：如果history.back()无效，尝试document.referrer
+        else if (document.referrer && document.referrer !== window.location.href) {
+            window.location.href = document.referrer;
+        }
+        // 方式3：如果都没有，提供选项
+        else {
+            // 创建一个选择对话框
+            const choice = confirm('没有可返回的上一页。\n\n选择"确定"返回到上一页面\n选择"取消"刷新当前页面');
+            if (choice) {
+                // 尝试返回上一条历史记录（即使可能无效）
+                window.history.go(-1);
+            } else {
+                window.location.reload();
+            }
+        }
+    } catch (error) {
+        // 如果所有方式都失败，简单刷新页面
+        console.log('返回操作失败，刷新页面');
+        window.location.reload();
+    }
+}
+
+// 页面加载时记录导航信息
+window.addEventListener('load', function() {
+    // 如果是从其他页面跳转过来的，记录来源
+    if (document.referrer && document.referrer !== window.location.href) {
+        sessionStorage.setItem('previousPage', document.referrer);
+        console.log('记录来源页面:', document.referrer);
+    }
+});
+
+// 改进的返回函数，支持sessionStorage
+function improvedGoBack() {
+    // 优先使用sessionStorage中记录的页面
+    const previousPage = sessionStorage.getItem('previousPage');
+    if (previousPage && previousPage !== window.location.href) {
+        window.location.href = previousPage;
+        return;
+    }
+    
+    // 如果sessionStorage没有，则使用原逻辑
+    goBack();
+}
+
+function refreshPage() {
+    window.location.reload();
+}
+
+</script>
