@@ -173,7 +173,7 @@
     }
 
     function protectedReset() {
-        const pwd = prompt("请输入密码(4321)重置今日练习：");
+        const pwd = prompt("请输入密码(4位)重置今日练习：");
         if (pwd === "0000") {
             localStorage.removeItem(CONFIG.stateKey);
             location.reload();
