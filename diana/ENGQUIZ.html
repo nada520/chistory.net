@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>英语首字母每日挑战 - 学习模式</title>
+    <script src="DATA.js"></script>
+    <style>
+        :root { --primary: #007aff; --bg: #f5f7fa; --text: #2c3e50; --success: #34c759; --error: #ff3b30; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+        .card { width: 100%; max-width: 650px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); position: relative; }
+        
+        .result-banner { display: none; background: #eef7ff; border: 2px solid var(--primary); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 30px; }
+        .score-num { font-size: 2.5em; font-weight: bold; color: var(--primary); }
+        
+        h1 { text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #8e8e93; margin-bottom: 30px; font-size: 0.9em; }
+        
+        .q-wrapper { margin-bottom: 30px; padding: 15px; border-radius: 10px; border: 1px solid #f0f0f0; }
+        .q-text { font-size: 1.1em; line-height: 1.5; margin-bottom: 12px; }
+        
+        .input-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        input { border: 2px solid #e5e5ea; border-radius: 8px; padding: 10px; width: 130px; font-size: 16px; outline: none; }
+        input:disabled { background: #f9f9f9; color: #333; cursor: default; border-color: #eee; }
+        
+        .feedback { margin-top: 12px; padding: 10px; border-radius: 6px; display: none; font-weight: 500; }
+        .is-correct { background: #eafff0; color: var(--success); border: 1px solid #b7eb8f; }
+        .is-wrong { background: #fff1f0; color: var(--error); border: 1px solid #ffa39e; }
+        
+        .submit-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; }
+        .submit-btn:hover { background: #0056b3; }
+        .submit-btn:disabled { display: none; }
+        
+        /* 隐形重置按钮 */
+        .debug-btn { position: fixed; bottom: 10px; right: 10px; padding: 5px 10px; background: rgba(0,0,0,0.05); color: #ccc; border: none; border-radius: 4px; font-size: 9px; cursor: pointer; }
+        .debug-btn:hover { background: rgba(0,0,0,0.1); color: #999; }
+
+        .footer-note { text-align: center; color: #8e8e93; font-size: 0.85em; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <button class="debug-btn" onclick="protectedReset()">ADMIN RESET</button>
+
+    <div id="result-banner" class="result-banner">
+        <div class="score-num" id="final-score">0/5</div>
+        <div id="evaluation" style="font-weight: 600; margin: 5px 0;"></div>
+        <div style="font-size: 0.85em; color: #666;">今日练习已记录，下方可查看详细批改。</div>
+    </div>
+
+    <h1>Diana 的 每日 5 题挑战</h1>
+    <div class="subtitle" id="date-display"></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button class="submit-btn" id="submit-btn" onclick="processSubmit()">确认提交并查看批改</button>
+    
+    <div class="footer-note">已做过的题目会自动从明日题库中移除。</div>
+</div>
+
+<script>
+    const CONFIG = { dailyCount: 5, stateKey: 'eng_quiz_v2_state', usedKey: 'eng_quiz_v2_used' };
+    let selectedQs = [];
+
+    function init() {
+        const today = new Date().toLocaleDateString();
+        document.getElementById('date-display').innerText = today;
+
+        const state = JSON.parse(localStorage.getItem(CONFIG.stateKey) || '{}');
+        const usedIds = JSON.parse(localStorage.getItem(CONFIG.usedKey) || '[]');
+
+        if (state.date === today && state.questions) {
+            selectedQs = state.questions;
+            renderQuiz(true, state.userAnswers);
+            showBanner(state.score);
+        } else {
+            let pool = database.filter(q => !usedIds.includes(q.id));
+            if (pool.length < CONFIG.dailyCount) {
+                alert("恭喜！所有新题已练完，将重置题目池。");
+                localStorage.setItem(CONFIG.usedKey, '[]');
+                pool = database;
+            }
+            selectedQs = pool.sort(() => 0.5 - Math.random()).slice(0, CONFIG.dailyCount);
+            renderQuiz(false);
+        }
+    }
+
+    function renderQuiz(isFinished, prevAnswers = []) {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        
+        selectedQs.forEach((item, qIdx) => {
+            const ansArr = item.a.split(/[,，]/);
+            let inputsHtml = '';
+            
+            ansArr.forEach((_, aIdx) => {
+                const val = (isFinished && prevAnswers[qIdx]) ? prevAnswers[qIdx][aIdx] : '';
+                inputsHtml += `<input type="text" class="q-in-${qIdx}" value="${val}" ${isFinished ? 'disabled' : ''} placeholder="单词">`;
+            });
+
+            const wrap = document.createElement('div');
+            wrap.className = 'q-wrapper';
+            wrap.innerHTML = `
+                <div class="q-text"><strong>${qIdx + 1}.</strong> ${item.q}</div>
+                <div class="input-row">${inputsHtml}</div>
+                <div id="feed-${qIdx}" class="feedback"></div>
+            `;
+            container.appendChild(wrap);
+
+            if (isFinished) {
+                checkAndDisplayFeedback(qIdx, item.a);
+            }
+        });
+    }
+
+    function checkAndDisplayFeedback(qIdx, correctStr) {
+        const inps = document.querySelectorAll(`.q-in-${qIdx}`);
+        const userVals = Array.from(inps).map(i => i.value.trim().toLowerCase());
+        const realVals = correctStr.split(/[,，]/).map(a => a.trim().toLowerCase());
+        const feed = document.getElementById(`feed-${qIdx}`);
+        
+        feed.style.display = 'block';
+        if (JSON.stringify(userVals) === JSON.stringify(realVals)) {
+            feed.className = 'feedback is-correct';
+            feed.innerText = '✅ 正确';
+        } else {
+            feed.className = 'feedback is-wrong';
+            feed.innerText = '❌ 错误。正确答案：' + correctStr;
+        }
+    }
+
+    function processSubmit() {
+        let score = 0;
+        let userAllAnswers = [];
+        const usedIds = JSON.parse(localStorage.getItem(CONFIG.usedKey) || '[]');
+
+        selectedQs.forEach((item, qIdx) => {
+            const inps = document.querySelectorAll(`.q-in-${qIdx}`);
+            const userVals = Array.from(inps).map(i => i.value.trim().toLowerCase());
+            userAllAnswers.push(userVals);
+            const realVals = item.a.split(/[,，]/).map(a => a.trim().toLowerCase());
+            if (JSON.stringify(userVals) === JSON.stringify(realVals)) score++;
+            if (!usedIds.includes(item.id)) usedIds.push(item.id);
+        });
+
+        localStorage.setItem(CONFIG.usedKey, JSON.stringify(usedIds));
+        localStorage.setItem(CONFIG.stateKey, JSON.stringify({
+            date: new Date().toLocaleDateString(),
+            score: score,
+            questions: selectedQs,
+            userAnswers: userAllAnswers
+        }));
+
+        location.reload(); 
+    }
+
+    function showBanner(score) {
+        document.getElementById('result-banner').style.display = 'block';
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('final-score').innerText = score + "/5";
+        const evals = ["加油，别气馁！", "有进步空间，继续加油。", "还可以，保持状态。", "优秀，继续努力！", "非常棒的表现！", "满分！无可挑剔！"];
+        document.getElementById('evaluation').innerText = evals[score] || "练习完成";
+    }
+
+    // 带密码保护的重置
+    function protectedReset() {
+        const pwd = prompt("请输入管理密码以重置今日记录：");
+        if (pwd === "4321") {
+            localStorage.removeItem(CONFIG.stateKey);
+            alert("今日状态已重置，请重新练习。");
+            location.reload();
+        } else if (pwd !== null) {
+            alert("密码错误，操作取消。");
+        }
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>
