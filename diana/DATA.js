@@ -100,7 +100,7 @@ const database = [
     {id:95, q:"We shouldn’t w_______ time. We should s_______ it.", a:"waste, save"},
     {id:96, q:"There is not m_______ energy on Earth.", a:"much"},
     {id:97, q:"Don’t d_______ so much, because cars use lots of e_______.", a:"drive, energy"},
-    {id:98, q:"Don’t worry. I can h_______ you.", a:"help"}
+    {id:98, q:"Don’t worry. I can h_______ you.", a:"help"},
     {id:101, q:"We should r_______ paper and bottles to save energy.", a:"recycle"},
     {id:102, q:"It's i_______ to keep our promises to others.", a:"important"},
     {id:103, q:"Don't be a_______ of the dog. It is very friendly.", a:"afraid"},
