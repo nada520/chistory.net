@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语首字母填空 - 每日挑战</title>
+    <script src="DATA.js"></script>
+    <style>
+        :root { --primary: #007aff; --bg: #f5f7fa; --text: #2c3e50; --success: #34c759; --error: #ff3b30; }
+        body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+        .card { width: 100%; max-width: 650px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); position: relative; }
+        
+        /* 状态横幅 */
+        .result-banner { display: none; background: #eef7ff; border: 2px solid var(--primary); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 30px; animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .score-num { font-size: 2.8em; font-weight: 800; color: var(--primary); }
+        
+        h1 { text-align: center; margin: 0 0 5px 0; font-size: 1.5em; }
+        .subtitle { text-align: center; color: #8e8e93; margin-bottom: 30px; font-size: 0.9em; }
+        
+        .q-wrapper { margin-bottom: 25px; padding: 18px; border-radius: 12px; border: 1px solid #f0f0f0; background: #fff; transition: all 0.3s; }
+        .q-text { font-size: 1.15em; line-height: 1.6; margin-bottom: 15px; word-break: break-word; }
+        .q-no { color: #ccc; font-weight: normal; font-size: 0.75em; margin-left: 10px; }
+        
+        .input-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        input { border: 2px solid #e5e5ea; border-radius: 10px; padding: 12px; width: 140px; font-size: 16px; outline: none; transition: 0.2s; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); background: #fafdff; }
+        input:disabled { background: #f9f9f9; color: #333; cursor: default; border-color: #eee; }
+        
+        /* 批改反馈 */
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 8px; display: none; font-weight: 600; font-size: 0.95em; }
+        .is-correct { background: #eafff0; color: var(--success); border: 1px solid #b7eb8f; }
+        .is-wrong { background: #fff1f0; color: var(--error); border: 1px solid #ffa39e; }
+        
+        .submit-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:hover { background: #0056b3; transform: translateY(-1px); }
+        .submit-btn:disabled { display: none; }
+        
+        /* 隐形管理按钮 */
+        .debug-btn { position: fixed; bottom: 15px; right: 15px; padding: 6px 10px; background: rgba(0,0,0,0.03); color: #ddd; border: none; border-radius: 4px; font-size: 10px; cursor: pointer; }
+        .debug-btn:hover { color: #999; background: rgba(0,0,0,0.1); }
+
+        .footer-note { text-align: center; color: #bbb; font-size: 0.8em; margin-top: 40px; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <button class="debug-btn" onclick="protectedReset()">ADMIN RESET</button>
+
+    <div id="result-banner" class="result-banner">
+        <div class="score-num" id="final-score">0/5</div>
+        <div id="evaluation" style="font-weight: 700; margin: 8px 0; font-size: 1.1em;"></div>
+        <div style="font-size: 0.85em; color: #666;">今日任务已达成！错题已用红色标出。</div>
+    </div>
+
+    <h1>首字母填空每日练习</h1>
+    <div class="subtitle" id="date-display"></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button class="submit-btn" id="submit-btn" onclick="processSubmit()">提交并查看批改结果</button>
+    
+    <div class="footer-note">已完成的题目将不会在近期再次出现</div>
+</div>
+
+<script>
+    const CONFIG = { dailyCount: 5, stateKey: 'eng_quiz_v3_state', usedKey: 'eng_quiz_v3_used' };
+    let selectedQs = [];
+
+    function init() {
+        const today = new Date().toLocaleDateString();
+        document.getElementById('date-display').innerText = today + " 练习任务";
+
+        const state = JSON.parse(localStorage.getItem(CONFIG.stateKey) || '{}');
+        const usedIds = JSON.parse(localStorage.getItem(CONFIG.usedKey) || '[]');
+
+        // 检查今日是否已锁定结果
+        if (state.date === today && state.questions) {
+            selectedQs = state.questions;
+            renderQuiz(true, state.userAnswers);
+            showBanner(state.score);
+        } else {
+            // 过滤未做题目
+            let pool = database.filter(q => !usedIds.includes(q.id));
+            
+            // 题库耗尽则重置
+            if (pool.length < CONFIG.dailyCount) {
+                localStorage.setItem(CONFIG.usedKey, '[]');
+                pool = database;
+            }
+            
+            // 随机抽题
+            selectedQs = pool.sort(() => 0.5 - Math.random()).slice(0, CONFIG.dailyCount);
+            renderQuiz(false);
+        }
+    }
+
+    function renderQuiz(isFinished, prevAnswers = []) {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        
+        selectedQs.forEach((item, qIdx) => {
+            const ansArr = item.a.split(/[,，]/);
+            let inputsHtml = '';
+            
+            ansArr.forEach((_, aIdx) => {
+                const val = (isFinished && prevAnswers[qIdx]) ? prevAnswers[qIdx][aIdx] : '';
+                inputsHtml += `<input type="text" class="q-in-${qIdx}" value="${val}" ${isFinished ? 'disabled' : ''} placeholder="拼写单词" spellcheck="false">`;
+            });
+
+            const wrap = document.createElement('div');
+            wrap.className = 'q-wrapper';
+            wrap.innerHTML = `
+                <div class="q-text">
+                    <strong>${qIdx + 1}.</strong> ${item.q}
+                    <span class="q-no">#${item.id}</span>
+                </div>
+                <div class="input-row">${inputsHtml}</div>
+                <div id="feed-${qIdx}" class="feedback"></div>
+            `;
+            container.appendChild(wrap);
+
+            if (isFinished) {
+                checkAndDisplayFeedback(qIdx, item.a);
+            }
+        });
+    }
+
+    function checkAndDisplayFeedback(qIdx, correctStr) {
+        const inps = document.querySelectorAll(`.q-in-${qIdx}`);
+        const userVals = Array.from(inps).map(i => i.value.trim().toLowerCase());
+        
+        // 【核心优化】使用正则剥离括号内的中文翻译进行校验
+        const realVals = correctStr.split(/[,，]/).map(a => {
+            return a.replace(/\s*\(.*?\)\s*/g, "").trim().toLowerCase();
+        });
+        
+        const feed = document.getElementById(`feed-${qIdx}`);
+        feed.style.display = 'block';
+        
+        if (JSON.stringify(userVals) === JSON.stringify(realVals)) {
+            feed.className = 'feedback is-correct';
+            feed.innerText = '✅ 正确！太棒了。';
+        } else {
+            feed.className = 'feedback is-wrong';
+            // 反馈时保留中文翻译
+            feed.innerText = '❌ 错误。正确答案：' + correctStr;
+        }
+    }
+
+    function processSubmit() {
+        let score = 0;
+        let userAllAnswers = [];
+        const usedIds = JSON.parse(localStorage.getItem(CONFIG.usedKey) || '[]');
+
+        selectedQs.forEach((item, qIdx) => {
+            const inps = document.querySelectorAll(`.q-in-${qIdx}`);
+            const userVals = Array.from(inps).map(i => i.value.trim().toLowerCase());
+            userAllAnswers.push(userVals);
+            
+            const realVals = item.a.split(/[,，]/).map(a => {
+                return a.replace(/\s*\(.*?\)\s*/g, "").trim().toLowerCase();
+            });
+
+            if (JSON.stringify(userVals) === JSON.stringify(realVals)) {
+                score++;
+            }
+            
+            if (!usedIds.includes(item.id)) usedIds.push(item.id);
+        });
+
+        localStorage.setItem(CONFIG.usedKey, JSON.stringify(usedIds));
+        localStorage.setItem(CONFIG.stateKey, JSON.stringify({
+            date: new Date().toLocaleDateString(),
+            score: score,
+            questions: selectedQs,
+            userAnswers: userAllAnswers
+        }));
+
+        location.reload(); 
+    }
+
+    function showBanner(score) {
+        document.getElementById('result-banner').style.display = 'block';
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('final-score').innerText = score + "/5";
+        const evals = [
+            "需要多加练习，加油！", 
+            "继续努力，相信你可以的。", 
+            "还不错，再细心一点点。", 
+            "表现很好，非常棒！", 
+            "几乎完美！再接再厉。", 
+            "全对！今日之星！🌟"
+        ];
+        document.getElementById('evaluation').innerText = evals[score] || "练习完成";
+    }
+
+    function protectedReset() {
+        const pwd = prompt("请输入管理员密码重置今日进度：");
+        if (pwd === "0000") {
+            localStorage.removeItem(CONFIG.stateKey);
+            alert("今日记录已成功清除，页面即将刷新。");
+            location.reload();
+        } else if (pwd !== null) {
+            alert("密码错误，权限不足。");
+        }
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
