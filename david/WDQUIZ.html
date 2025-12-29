@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日五词 - 精简一行版</title>
+    <script src="WDDATA.js"></script>
+    <style>
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f8f9fa; --correct: #27ae60; --wrong: #e74c3c; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .card { background: white; width: 100%; max-width: 480px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 1.3rem; }
+        .date-sub { text-align: center; color: #95a5a6; font-size: 0.8rem; margin-bottom: 20px; }
+        
+        .word-item { margin-bottom: 25px; border-bottom: 1px solid #f1f1f1; padding-bottom: 15px; }
+        .word-label { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 1rem; color: #34495e; }
+        
+        /* 字母方格容器：确保不换行 */
+        .letter-grid { display: flex; justify-content: space-between; gap: 2px; width: 100%; }
+        .letter-input {
+            flex: 1; min-width: 0; height: 35px; text-align: center; font-size: 1.1rem;
+            border: 1px solid #ccd1d9; border-radius: 4px; outline: none;
+            text-transform: lowercase; font-family: 'Courier New', Courier, monospace;
+        }
+        .letter-input:focus { border-color: var(--accent); background: #f0f9ff; box-shadow: 0 0 3px rgba(52,152,219,0.3); }
+        .letter-input:disabled { background: #fdfdfd; cursor: default; }
+        
+        /* 状态颜色 */
+        .correct-box { border-color: var(--correct) !important; color: var(--correct); background: #f0fff4 !important; }
+        .wrong-box { border-color: var(--wrong) !important; color: var(--wrong); background: #fff5f5 !important; }
+        
+        .ans-feedback { font-size: 0.85rem; margin-top: 8px; font-weight: bold; color: var(--wrong); }
+        .btn-submit { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        .btn-submit:disabled { display: none; }
+        
+        .stats-box { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: center; display: none; }
+        .total-val { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
+        .speaker { cursor: pointer; color: var(--accent); font-size: 1.1rem; visibility: hidden; }
+        .is-locked .speaker { visibility: visible; }
+        .reset-btn { position: fixed; bottom: 8px; right: 8px; opacity: 0.15; border: 1px solid #ccc; background: none; font-size: 9px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="title">Daily Vocab</h2>
+    <div id="date-display" class="date-sub"></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button id="submit-btn" class="btn-submit" onclick="submitAll()">确认提交 (不可刷新)</button>
+
+    <div id="stats" class="stats-box">
+        <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 4px;">今日对词 / 累计对词</div>
+        <div id="score-text" class="total-val">0 / 0</div>
+    </div>
+
+    <button class="reset-btn" onclick="doReset()">RESET</button>
+</div>
+
+<script>
+    const GRID_COUNT = 12; // 12个格子足以覆盖所有单词，且在小屏幕能排成一行
+    const STORAGE_KEY = "vocab_secure_v6";
+    const PWD = "0000";
+
+    const db = window.MY_WORD_DATABASE;
+    const wordPool = [];
+    if(db) {
+        [db.FRUIT_DATA, db.VEGETABLE_DATA].forEach(s => s.categories.forEach(c => c.items.forEach(i => {
+            // 拼写测试去掉空格，例如 "lotus root" 变为 "lotusroot"
+            wordPool.push({ en: i.en.toLowerCase().replace(/\s+/g, ''), zh: i.zh });
+        })));
+    }
+
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+        date: "", history: [], todayWords: [], todayAns: [], locked: false, total: 0
+    };
+
+    const today = new Date().toDateString();
+
+    if (state.date !== today) {
+        let available = wordPool.filter(w => !state.history.includes(w.en));
+        if (available.length < 5) { state.history = []; available = [...wordPool]; }
+        state.todayWords = available.sort(() => 0.5 - Math.random()).slice(0, 5);
+        state.date = today;
+        state.locked = false;
+        state.todayAns = [];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function render() {
+        document.getElementById('date-display').innerText = new Date().toLocaleDateString();
+        const container = document.getElementById('quiz-container');
+        container.classList.toggle('is-locked', state.locked);
+        container.innerHTML = '';
+
+        let todayScore = 0;
+
+        state.todayWords.forEach((word, wordIdx) => {
+            const userStr = state.locked ? state.todayAns[wordIdx] : "";
+            const correct = state.locked && userStr === word.en;
+            if(correct) todayScore++;
+
+            const div = document.createElement('div');
+            div.className = 'word-item';
+            div.innerHTML = `
+                <div class="word-label">
+                    <span>${wordIdx+1}. ${word.zh}</span>
+                    <span class="speaker" onclick="say('${word.en}')">🔊</span>
+                </div>
+                <div class="letter-grid" id="grid-${wordIdx}"></div>
+                ${state.locked && !correct ? `<div class="ans-feedback">Correct: ${word.en}</div>` : ''}
+            `;
+            container.appendChild(div);
+
+            const grid = div.querySelector('.letter-grid');
+            for(let i=0; i < GRID_COUNT; i++) {
+                const input = document.createElement('input');
+                input.type = "text";
+                input.maxLength = 1;
+                input.className = 'letter-input';
+                if(state.locked) {
+                    input.value = userStr[i] || "";
+                    input.disabled = true;
+                    if(userStr[i] || i < word.en.length) {
+                        input.classList.add(correct ? 'correct-box' : 'wrong-box');
+                    }
+                }
+                
+                // 自动跳格和退格逻辑
+                input.oninput = (e) => {
+                    if(e.target.value && i < GRID_COUNT - 1) grid.children[i+1].focus();
+                };
+                input.onkeydown = (e) => {
+                    if(e.key === 'Backspace' && !e.target.value && i > 0) grid.children[i-1].focus();
+                };
+                grid.appendChild(input);
+            }
+        });
+
+        if (state.locked) {
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('stats').style.display = 'block';
+            document.getElementById('score-text').innerText = `${todayScore} / ${state.total}`;
+        }
+    }
+
+    window.submitAll = () => {
+        const answers = [];
+        let score = 0;
+        state.todayWords.forEach((word, idx) => {
+            let userVal = "";
+            const grid = document.getElementById(`grid-${idx}`);
+            Array.from(grid.children).forEach(inp => userVal += inp.value);
+            userVal = userVal.trim().toLowerCase();
+            answers.push(userVal);
+            if(userVal === word.en) score++;
+            if(!state.history.includes(word.en)) state.history.push(word.en);
+        });
+
+        state.locked = true;
+        state.todayAns = answers;
+        state.total = (state.total || 0) + score;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        render();
+    };
+
+    window.say = (t) => {
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'en-US';
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(m);
+    };
+
+    window.doReset = () => {
+        if(prompt("Password:") === PWD) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+    };
+
+    render();
+</script>
+</body>
+</html>
