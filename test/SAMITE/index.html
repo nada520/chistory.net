@@ -2,42 +2,43 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>项目管理系统</title>
+    <title>项目资料管理系统</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         :root {
-            --title-bg: #5d6d7e; /* 大标题背景 */
-            --label-bg: #f5f5f5; /* 项名称背景 */
-            --sub-header-bg: #eaf2f8; /* 子分类/表头背景 */
+            --header-bg: #34495e;
+            --main-title-bg: #546e7a; /* 引导性标题背景 */
+            --label-bg: #f8f9fa;      /* 项名称背景 */
+            --sub-header-bg: #e3f2fd; /* I, II, III 分类背景 */
             --border: #dcdfe6;
         }
-        body { font-family: "Microsoft YaHei", sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; background: #eaedf1; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
         
-        /* 顶部 Tab */
-        .file-tabs { display: flex; background: #2c3e50; padding: 10px 15px 0; gap: 5px; }
-        .tab-btn { padding: 10px 20px; border: none; cursor: pointer; background: #3e4f5f; color: #fff; border-radius: 4px 4px 0 0; }
+        /* 顶部文件 Tab */
+        .file-tabs { display: flex; background: #2c3e50; padding: 10px 15px 0; gap: 5px; overflow-x: auto; }
+        .tab-btn { padding: 10px 20px; border: none; cursor: pointer; background: #3e4f5f; color: #fff; border-radius: 4px 4px 0 0; white-space: nowrap; }
         .tab-btn.active { background: #fff; color: #2c3e50; font-weight: bold; }
 
-        /* 内容 */
+        /* 内容区 */
         .content-area { padding: 20px; min-height: 500px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        td { border: 1px solid var(--border); padding: 10px; font-size: 14px; word-break: break-all; }
+        td { border: 1px solid var(--border); padding: 12px; font-size: 14px; word-break: break-all; }
 
-        /* 颜色分区样式 */
-        .row-main-title { background: var(--title-bg) !important; color: white !important; font-weight: bold; text-align: center; }
-        .cell-label { background: var(--label-bg); font-weight: bold; width: 150px; }
-        .cell-sub-header { background: var(--sub-header-bg); font-weight: bold; text-align: center; color: #2980b9; }
-        .cell-value { background: #fff; }
+        /* 行样式分区 */
+        .row-main-title { background: var(--main-title-bg) !important; color: white !important; font-weight: bold; text-align: center; }
+        .cell-label { background: var(--label-bg); font-weight: bold; color: #333; width: 160px; }
+        .cell-sub-header { background: var(--sub-header-bg); font-weight: bold; text-align: center; color: #1976d2; }
+        .cell-value { background: #fff; color: #444; }
 
         /* 底部 Sheet Tab */
-        .sheet-tabs { display: flex; background: #f8f9fa; border-top: 1px solid #ccc; }
-        .sheet-btn { padding: 10px 20px; border: none; cursor: pointer; background: transparent; color: #666; border-right: 1px solid #ddd; }
-        .sheet-btn.active { background: #fff; color: #3498db; font-weight: bold; border-bottom: 3px solid #3498db; }
+        .sheet-tabs { display: flex; background: #f1f3f4; border-top: 1px solid #ccc; }
+        .sheet-btn { padding: 10px 25px; border: none; cursor: pointer; background: transparent; color: #666; border-right: 1px solid #ddd; }
+        .sheet-btn.active { background: #fff; color: #2196f3; font-weight: bold; border-bottom: 3px solid #2196f3; }
 
-        /* 图片/料单显示 */
-        .info-msg { text-align: center; padding: 50px; color: #e67e22; font-size: 18px; font-weight: bold; }
-        .img-box img { max-width: 100%; display: block; margin: 0 auto; border: 1px solid #ddd; }
+        /* 错误/提示样式 */
+        .info-msg { text-align: center; padding: 60px; color: #7f8c8d; font-size: 18px; }
+        .img-box img { max-width: 100%; display: block; margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -52,8 +53,7 @@
     let allData = {};
     const DIR = "./Project/";
 
-    // 1. 加载文件
-    async function loadFiles() {
+    async function init() {
         for (let i = 1; i <= 20; i++) {
             const fileName = `${i}.xlsx`;
             try {
@@ -65,57 +65,55 @@
                 let project = { sheets: {}, name: `项目 ${i}` };
                 wb.SheetNames.forEach((sName, idx) => {
                     const ws = wb.Sheets[sName];
+                    // 获取原始数组，defval:"" 保证列索引不偏移
                     const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
                     project.sheets[sName] = json;
                     
-                    // 提取项目名称作为 Tab 名
+                    // 提取 B 列的项目名称内容
                     if (idx === 0) {
-                        for(let row of json) {
-                            let pIdx = row.indexOf("项目名称");
-                            if (pIdx !== -1 && row[pIdx+1]) project.name = row[pIdx+1];
+                        for(let r=0; r<json.length; r++) {
+                            if (json[r][1] === "项目名称") {
+                                project.name = json[r][2] || project.name;
+                                break;
+                            }
                         }
                     }
                 });
                 allData[fileName] = project;
-                createFileTab(fileName, project.name);
-                if (i === 1) selectFile(fileName);
+                addFileTab(fileName, project.name);
+                if (i === 1) renderProject(fileName);
             } catch (e) { break; }
         }
     }
 
-    function createFileTab(id, name) {
+    function addFileTab(id, name) {
         const btn = document.createElement('button');
         btn.className = 'tab-btn';
-        btn.id = "f-" + id;
+        btn.id = "btn-" + id;
         btn.innerText = name;
-        btn.onclick = () => selectFile(id);
+        btn.onclick = () => renderProject(id);
         document.getElementById('fileTabs').appendChild(btn);
     }
 
-    function selectFile(id) {
+    function renderProject(fid) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById("f-" + id).classList.add('active');
+        document.getElementById("btn-" + fid).classList.add('active');
         
-        const sheets = Object.keys(allData[id].sheets);
-        renderSheetTabs(id, sheets);
-        renderContent(id, sheets[0]);
-    }
-
-    function renderSheetTabs(fid, sheets) {
-        const container = document.getElementById('sheetTabs');
-        container.innerHTML = "";
-        sheets.forEach(name => {
-            const btn = document.createElement('button');
-            btn.className = 'sheet-btn';
-            btn.innerText = name;
-            btn.onclick = (e) => {
+        const sheets = Object.keys(allData[fid].sheets);
+        const sContainer = document.getElementById('sheetTabs');
+        sContainer.innerHTML = "";
+        sheets.forEach(sName => {
+            const sBtn = document.createElement('button');
+            sBtn.className = 'sheet-btn';
+            sBtn.innerText = sName;
+            sBtn.onclick = (e) => {
                 document.querySelectorAll('.sheet-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                renderContent(fid, name);
+                renderContent(fid, sName);
             };
-            container.appendChild(btn);
+            sContainer.appendChild(sBtn);
         });
-        container.firstChild.classList.add('active');
+        sContainer.firstChild.click();
     }
 
     function renderContent(fid, sName) {
@@ -123,58 +121,56 @@
         const data = allData[fid].sheets[sName];
         const sheetIdx = Object.keys(allData[fid].sheets).indexOf(sName);
 
-        // 如果是第二个 Sheet，加载同名 JPG
+        // 第二个 Sheet 逻辑：显示同名 JPG
         if (sheetIdx === 1) {
-            const imgPath = DIR + fid.replace('.xlsx', '.jpg');
+            const imgFile = fid.replace('.xlsx', '.jpg');
             area.innerHTML = `
                 <div class="img-box">
-                    <img src="${imgPath}" onerror="this.parentElement.innerHTML='<div class=\'info-msg\'>暂无相应料单信息，请补充。</div>'">
+                    <img src="${DIR + imgFile}" onerror="this.parentElement.innerHTML='<div class=\'info-msg\'>暂无相应料单信息，请补充。</div>'">
                 </div>`;
             return;
         }
 
-        // 渲染第一个 Sheet 表格内容
+        // 第一个 Sheet 逻辑：显示表格
         let html = "<table>";
         data.forEach((row) => {
-            // 跳过全空行
-            if (row.every(cell => cell === "")) return;
+            // 只要 B 列以后有内容的行都显示
+            const contentAfterB = row.slice(1);
+            if (contentAfterB.every(c => c === "")) return;
 
-            // 识别大标题行：比如“项目关键数据”、“涂层要求”
-            const nonEmpty = row.filter(c => c !== "");
-            const titleKeywords = ["项目关键数据", "涂层要求", "材质特殊要求"];
-            const isMainTitle = nonEmpty.length === 1 && titleKeywords.some(k => nonEmpty[0].includes(k));
-
+            // 识别引导性大标题 (在 B 列)
+            const isMainTitle = ["项目关键数据", "涂层要求", "材质特殊要求", "防爆要求"].some(k => String(row[1]).includes(k));
             if (isMainTitle) {
-                html += `<tr><td colspan="${row.length}" class="row-main-title">${nonEmpty[0]}</td></tr>`;
+                html += `<tr><td colspan="${row.length}" class="row-main-title">${row[1]}</td></tr>`;
                 return;
             }
 
             html += "<tr>";
-            row.forEach((cell, cIdx) => {
-                if (cIdx === 0) return; // 略过最左侧 A 列空白
-
+            // 强制从第 2 列 (Index 1, 即 B 列) 开始显示，这就是你的“项名称”
+            for (let c = 1; c < row.length; c++) {
+                const cell = row[c];
                 let cls = "cell-value";
                 
-                // 识别“项名称”（第一列标签）
-                if (cIdx === 1 && cell !== "") {
+                // 项名称列样式 (B 列)
+                if (c === 1 && cell !== "") {
                     cls = "cell-label";
                 }
                 
-                // 识别子表头（I, II, III... 或 品牌, 层数, DFT等）
-                const isSubHeader = ["I","II","III","IV","V","VI","品牌限定","层数","DFT","标准","起重链条","手拉链条"].includes(cell);
-                if (isSubHeader) {
+                // 子标题样式识别 (I, II, III 或 品牌, 层数, DFT 等)
+                const subHeaders = ["I","II","III","IV","V","VI","品牌限定","层数","DFT","标准","起重链条","手拉链条"];
+                if (subHeaders.includes(String(cell).trim())) {
                     cls = "cell-sub-header";
                 }
 
                 html += `<td class="${cls}">${cell}</td>`;
-            });
+            }
             html += "</tr>";
         });
         html += "</table>";
         area.innerHTML = html;
     }
 
-    window.onload = loadFiles;
+    window.onload = init;
 </script>
 </body>
 </html>
