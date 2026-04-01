@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>项目信息管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: "Microsoft YaHei", sans-serif; background: #f4f7f9; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        
+        /* 顶部文件 Tab */
+        .file-tabs { display: flex; background: #34495e; padding: 10px 10px 0; gap: 5px; overflow-x: auto; }
+        .tab-btn { padding: 10px 20px; border: none; cursor: pointer; background: #2c3e50; color: #bdc3c7; border-radius: 5px 5px 0 0; transition: 0.3s; white-space: nowrap; }
+        .tab-btn.active { background: #fff; color: #2c3e50; font-weight: bold; }
+
+        /* 内容展示区 */
+        .content-area { padding: 30px; min-height: 400px; }
+        .info-row { display: flex; margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+        .label { font-weight: bold; width: 150px; color: #333; }
+        .value { color: #666; flex: 1; }
+
+        /* 底部 Sheet Tab */
+        .sheet-tabs { display: flex; background: #ecf0f1; padding: 0 10px; border-top: 1px solid #ddd; }
+        .sheet-btn { padding: 8px 15px; border: none; cursor: pointer; background: transparent; color: #7f8c8d; border-right: 1px solid #ddd; }
+        .sheet-btn.active { background: #fff; color: #2980b9; font-weight: bold; }
+
+        /* 截图显示 */
+        .image-container { text-align: center; padding: 20px; }
+        .image-container img { max-width: 100%; border: 1px solid #ddd; }
+        .loading { padding: 20px; text-align: center; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="fileTabs" class="file-tabs">
+        </div>
+    
+    <div id="displayArea" class="content-area">
+        <div class="loading">正在扫描 Project 文件夹中的项目文件...</div>
+    </div>
+
+    <div id="sheetTabs" class="sheet-tabs">
+        </div>
+</div>
+
+<script>
+    let allFileData = {}; // 存储所有文件的数据
+    let currentFile = "";
+    const PROJECT_DIR = "./Project/";
+
+    // 1. 穷举扫描文件
+    async function scanFiles() {
+        const fileTabs = document.getElementById('fileTabs');
+        let fileIndex = 1;
+        let foundAny = false;
+
+        while (fileIndex <= 20) { // 设定一个合理的上限，如20个
+            const fileName = `${fileIndex}.xlsx`;
+            try {
+                const response = await fetch(PROJECT_DIR + fileName);
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const data = processExcel(arrayBuffer);
+                    allFileData[fileName] = data;
+                    
+                    // 创建文件 Tab
+                    const btn = document.createElement('button');
+                    btn.className = 'tab-btn';
+                    btn.innerText = data.projectName || `项目 ${fileIndex}`;
+                    btn.onclick = () => switchFile(fileName);
+                    fileTabs.appendChild(btn);
+                    
+                    if (!foundAny) {
+                        switchFile(fileName);
+                        foundAny = true;
+                    }
+                } else {
+                    break; // 找不到连续的数字文件则停止
+                }
+            } catch (e) {
+                break;
+            }
+            fileIndex++;
+        }
+
+        if (!foundAny) {
+            document.getElementById('displayArea').innerHTML = "未在 Project 文件夹中找到 1.xlsx 等文件。";
+        }
+    }
+
+    // 2. 处理 Excel 数据
+    function processExcel(buffer) {
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        let result = { sheets: {}, projectName: "" };
+
+        workbook.SheetNames.forEach((name, index) => {
+            const worksheet = workbook.Sheets[name];
+            // 将 Sheet 转换为 JSON
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            result.sheets[name] = jsonData;
+
+            // 尝试获取项目名称作为 Tab 显示
+            if (index === 0 && jsonData[3] && jsonData[3][2]) {
+                result.projectName = jsonData[3][2]; 
+            }
+        });
+        return result;
+    }
+
+    // 3. 切换文件
+    function switchFile(fileName) {
+        currentFile = fileName;
+        // 更新 Tab 样式
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText === allFileData[fileName].projectName);
+        });
+        
+        renderSheetTabs(fileName);
+        renderSheetContent(fileName, Object.keys(allFileData[fileName].sheets)[0]);
+    }
+
+    // 4. 渲染底部 Sheet Tabs
+    function renderSheetTabs(fileName) {
+        const container = document.getElementById('sheetTabs');
+        container.innerHTML = "";
+        const sheets = Object.keys(allFileData[fileName].sheets);
+        
+        sheets.forEach(name => {
+            const btn = document.createElement('button');
+            btn.className = 'sheet-btn';
+            btn.innerText = name;
+            btn.onclick = () => renderSheetContent(fileName, name);
+            container.appendChild(btn);
+        });
+    }
+
+    // 5. 渲染内容
+    function renderSheetContent(fileName, sheetName) {
+        const display = document.getElementById('displayArea');
+        const data = allFileData[fileName].sheets[sheetName];
+        
+        // 更新 Sheet Tab 样式
+        document.querySelectorAll('.sheet-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText === sheetName);
+        });
+
+        // 判断是否为第二个 Sheet (通常存放截图)
+        const sheetIndex = Object.keys(allFileData[fileName].sheets).indexOf(sheetName);
+        
+        if (sheetIndex === 1) {
+            // 第二个 Sheet 展示截图逻辑
+            // 注意：Excel 内部截图无法直接通过 JS 读取为图片，建议放置同名的 .jpg 并在 Sheet 记录文件名
+            display.innerHTML = `
+                <div class="image-container">
+                    <p style="color:#999">正在读取该项目的技术规格图...</p>
+                    <img src="${PROJECT_DIR}${fileName.replace('.xlsx', '.jpg')}" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image+Found'">
+                </div>`;
+        } else {
+            // 第一个 Sheet 展示表单内容
+            let html = "";
+            data.forEach(row => {
+                // 仅显示有数据的行，且识别“黑体”部分（示例中通常在 A 或 B 列作为标签）
+                if (row.length > 0 && row[1]) {
+                    const label = row[1]; // 对应 Excel 的 B 列
+                    const value = row[2] || ""; // 对应 Excel 的 C 列
+                    html += `
+                        <div class="info-row">
+                            <div class="label">${label}</div>
+                            <div class="value">${value}</div>
+                        </div>`;
+                }
+            });
+            display.innerHTML = html || "该 Sheet 无有效数据";
+        }
+    }
+
+    window.onload = scanFiles;
+</script>
+</body>
+</html>
