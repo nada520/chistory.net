@@ -16,6 +16,7 @@
         body { background-color: var(--bg-color); color: #333; padding: 10px; -webkit-text-size-adjust: 100%; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
+        /* 🛠️ 大标题图标更换为 📚 */
         h1 { text-align: center; color: var(--primary-color); margin-bottom: 15px; font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
         /* 🔐 登录/注册/游客界面 */
@@ -26,6 +27,7 @@
         .auth-btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .auth-btn-group .btn { flex: 1; text-align: center; padding: 12px 0; }
         .visitor-lnk { text-align: center; font-size: 14px; }
+        /* 🛠️ 游客入口图标更换为 👥 */
         .visitor-lnk a { color: var(--accent-color); text-decoration: none; font-weight: bold; cursor: pointer; }
         
         /* 🌐 主系统布局 */
@@ -92,7 +94,6 @@
         
         .punctuation { font-size: 20px; font-weight: bold; color: #7f8c8d; margin: 0 1px; flex-shrink: 0; display: inline-block; font-family: "KaiTi", serif; }
         
-        /* 核心修正：强制让最下面的三个大交互按钮在同一行平铺不换行 */
         .control-panel { text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: nowrap; width: 100%; }
         .control-panel .btn { flex: 1; padding: 10px 4px; font-size: 13px; text-align: center; font-weight: bold; }
         
@@ -237,7 +238,7 @@
 
     const CLOUD_STORAGE_PREFIX = "poem_quiz_v2_";
 
-    // 🏆 10级成就调色盘及图标（完全重构：从浅灰幼学到青铜、银白、金黄、直至紫钻）
+    // 🏆 10级成就调色盘 + 1个隐藏的终极 Max 成就
     const ACHIEVEMENT_LEVELS = [
         { lv: 0,  pct: 0.0, name: "幼学童子", icon: "👶", bg: "#e2e8f0", border: "#cbd5e1", text: "#475569", cond: "新晋入门，尚未解锁测试成就" },
         { lv: 1,  pct: 0.1, name: "才露尖尖角", icon: "🌱", bg: "#edd8c4", border: "#b8860b", text: "#8b5a2b", cond: "独立测试完成10%的古诗【青铜】" },
@@ -245,11 +246,14 @@
         { lv: 3,  pct: 0.3, name: "吟坛新秀",   icon: "✍️", bg: "#fff7e6", border: "#ffd700", text: "#b7791f", cond: "独立测试完成30%的古诗【黄金】" },
         { lv: 4,  pct: 0.4, name: "词人雅士",   icon: "📜", bg: "#e6fffa", border: "#4fd1c5", text: "#234e52", cond: "独立测试完成40%的古诗【翡翠】" },
         { lv: 5,  pct: 0.5, name: "胸有成竹",   icon: "🎍", bg: "#eef2ff", border: "#818cf8", text: "#312e81", cond: "独立测试完成50%的古诗【青玉】" },
+        /* 🛠️ 小更正：独立测试完成60%的古诗【玛瑙】 */
         { lv: 6,  pct: 0.6, name: "下笔成章",   icon: "🦅", bg: "#fdf2f8", border: "#f472b6", text: "#4c0519", cond: "独立测试完成60%的古诗【玛瑙】" },
         { lv: 7,  pct: 0.7, name: "满腹经纶",   icon: "🏮", bg: "#fff5f5", border: "#f87171", text: "#742a2a", cond: "独立测试完成70%的古诗【红宝】" },
         { lv: 8,  pct: 0.8, name: "斗酒百篇",   icon: "🍶", bg: "#f0fdf4", border: "#4ade80", text: "#14532d", cond: "独立测试完成80%的古诗【琥珀】" },
         { lv: 9,  pct: 0.9, name: "独步诗坛",   icon: "⚡", bg: "#ecfeff", border: "#22d3ee", text: "#083344", cond: "独立测试完成90%的古诗【蓝晶】" },
-        { lv: 10, pct: 1.0, name: "诗圣降世",   icon: "👑", bg: "#f3e8ff", border: "#c084fc", text: "#581c87", cond: "独立测试完成100%的古诗【紫钻】" }
+        { lv: 10, pct: 1.0, name: "诗圣降世",   icon: "👑", bg: "#f3e8ff", border: "#c084fc", text: "#581c87", cond: "独立测试完成100%的古诗【紫钻】" },
+        // 🛠️ 最终等级 Max 成就：人诗合一 (曜金渐变色皮肤)
+        { lv: 99, pct: 9.9, name: "人诗合一",   icon: "🌞", bg: "linear-gradient(135deg, #ff9900, #ff5500)", border: "#e65c00", text: "#ffffff", cond: "【MAX终极隐藏】全部诗篇均独立完成3次以上！" }
     ];
     
     function getCloudUsers() {
@@ -331,6 +335,22 @@
         renderIndex();
     }
 
+    // 🛠️ 辅助函数：判断某个学生是否达成“人诗合一”
+    function checkIsMaxAchieved(uStats) {
+        if (typeof poemDatabase === 'undefined' || poemDatabase.length === 0) return false;
+        // 必须所有诗都有记录，且每一次记录的值都必须 >= 3
+        let passedAll = true;
+        for (let i = 0; i < poemDatabase.length; i++) {
+            const pid = poemDatabase[i].id;
+            const count = uStats[pid] || 0;
+            if (count < 3) {
+                passedAll = false;
+                break;
+            }
+        }
+        return passedAll;
+    }
+
     function showAdminPanel() {
         document.getElementById('auth-page').style.display = 'none';
         document.getElementById('admin-system').style.display = 'block';
@@ -349,11 +369,16 @@
             const passedCount = Object.keys(uStats).filter(k => uStats[k] > 0).length;
             const ratio = passedCount / totalPoems;
             
-            // 为管理端拉取动态称号和图标颜色
             let currentLevelObj = ACHIEVEMENT_LEVELS[0];
-            ACHIEVEMENT_LEVELS.forEach(lv => {
-                if(ratio >= lv.pct) currentLevelObj = lv;
-            });
+            
+            // 核心逻辑：先判满级隐藏成就，再判普通十级
+            if(checkIsMaxAchieved(uStats)){
+                currentLevelObj = ACHIEVEMENT_LEVELS.find(l => l.lv === 99);
+            } else {
+                ACHIEVEMENT_LEVELS.forEach(lv => {
+                    if(lv.lv !== 99 && ratio >= lv.pct) currentLevelObj = lv;
+                });
+            }
 
             let detailTexts = [];
             Object.keys(uStats).forEach(pid => {
@@ -405,7 +430,6 @@
         updateUserBadgeAndRank(); 
     }
 
-    // 🎨 动态渲染学生的等级样式属性
     function updateUserBadgeAndRank() {
         if(isVisitor) return;
         const totalPoems = (typeof poemDatabase !== 'undefined') ? poemDatabase.length : 1;
@@ -414,16 +438,21 @@
         const passedCount = Object.keys(uStats).filter(k => uStats[k] > 0).length;
         const currentRatio = passedCount / totalPoems;
 
-        let activeLevel = ACHIEVEMENT_LEVELS[0]; // 默认无名小卒👶
-        ACHIEVEMENT_LEVELS.forEach(lv => {
-            if (currentRatio >= lv.pct) {
-                activeLevel = lv;
-            }
-        });
+        let activeLevel = ACHIEVEMENT_LEVELS[0]; 
+        
+        if(checkIsMaxAchieved(uStats)){
+            activeLevel = ACHIEVEMENT_LEVELS.find(l => l.lv === 99);
+        } else {
+            ACHIEVEMENT_LEVELS.forEach(lv => {
+                if (lv.lv !== 99 && currentRatio >= lv.pct) {
+                    activeLevel = lv;
+                }
+            });
+        }
         
         const badgeNode = document.getElementById('user-rank-badge');
         badgeNode.innerText = `${activeLevel.icon} 级别: ${activeLevel.name}`;
-        badgeNode.style.backgroundColor = activeLevel.bg;
+        badgeNode.style.background = activeLevel.bg;
         badgeNode.style.borderColor = activeLevel.border;
         badgeNode.style.color = activeLevel.text;
     }
@@ -443,18 +472,26 @@
         const container = document.getElementById('trophy-container');
         container.innerHTML = '';
 
+        // 渲染全部 12 个勋章坑位（1个初始 + 10个进度 + 1个MAX）
         ACHIEVEMENT_LEVELS.forEach(lv => {
-            const isUnlocked = (lv.lv === 0) || (currentRatio >= lv.pct);
+            let isUnlocked = false;
+            if (lv.lv === 0) {
+                isUnlocked = true;
+            } else if (lv.lv === 99) {
+                isUnlocked = checkIsMaxAchieved(uStats);
+            } else {
+                isUnlocked = currentRatio >= lv.pct;
+            }
+
             const item = document.createElement('div');
             item.className = `trophy-item ${isUnlocked ? 'unlocked' : ''}`;
             
-            // 保持解锁后绚丽的动态背景色
             if(isUnlocked) {
-                item.style.backgroundColor = lv.bg;
+                item.style.background = lv.bg;
                 item.style.borderColor = lv.border;
                 item.style.color = lv.text;
             } else {
-                item.style.backgroundColor = '';
+                item.style.background = '';
                 item.style.borderColor = '';
                 item.style.color = '';
             }
@@ -559,7 +596,6 @@
             badge.className = "current-mode-tag tag-test";
             panel.style.display = 'flex';
             document.getElementById('current-poem-status').style.display = 'inline-block';
-            // 🛠️ 同步将详情页右上角角标改为“完成:”
             document.getElementById('current-poem-status').innerText = `完成: ${getUserStatCount(id)}次`;
             usedHintInCurrentTest = false; 
         }
@@ -792,11 +828,10 @@
             if (!usedHintInCurrentTest) {
                 saveUserStat(currentPoem.id);
                 setPoemLock(currentPoem.id); 
-                msgZone.innerHTML = '🎉 太棒了！全对！由于你未查阅任何提示，本次成绩已计入独立完成次数中。';
-                // 🛠️ 同步更新详情页右上角角标
+                msgZone.innerHTML = '🎉 太棒了！全对！由于你未查阅任何提示，本次成绩已计入完成次数中。';
                 document.getElementById('current-poem-status').innerText = `完成: ${getUserStatCount(currentPoem.id)}次`;
             } else {
-                msgZone.innerHTML = '✨ 全都填对啦！但由于你使用了“💡显示提示”功能，本次记录不增加独立完成次数。';
+                msgZone.innerHTML = '✨ 全都填对啦！但由于你使用了“💡显示提示”功能，本次记录不增加完成次数。';
             }
         } else {
             msgZone.innerHTML = '❌ 检查出有格子填写错误或者尚未填写，请修改红框/红格处！';
