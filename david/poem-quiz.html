@@ -10,26 +10,31 @@
             --primary-color: #2c3e50;
             --accent-color: #16a085;
             --bg-color: #f8f9fa;
-            --grid-size: 42px; /* 移动端微调方格尺寸，防止标点溢出换行 */
+            --grid-size: 42px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
         body { background-color: var(--bg-color); color: #333; padding: 10px; -webkit-text-size-adjust: 100%; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 4. 优化大标题与副标题样式 */
         h1 { text-align: center; color: var(--primary-color); margin-bottom: 15px; font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
-        /* 🔐 登录/注册云端系统界面 */
-        #auth-page { display: block; max-width: 350px; margin: 60px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-        #auth-page h2 { text-align: center; margin-bottom: 20px; color: var(--primary-color); font-size: 20px; }
-        .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; outline: none; }
+        /* 🔐 登录/注册/游客界面 */
+        #auth-page { display: block; max-width: 350px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        #auth-page h2 { text-align: center; margin-bottom: 15px; color: var(--primary-color); font-size: 20px; }
+        .auth-input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; outline: none; }
         .auth-input:focus { border-color: var(--accent-color); }
-        .auth-btn-group { display: flex; gap: 10px; }
+        .auth-btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .auth-btn-group .btn { flex: 1; text-align: center; padding: 12px 0; }
+        .visitor-lnk { text-align: center; font-size: 14px; }
+        .visitor-lnk a { color: var(--accent-color); text-decoration: none; font-weight: bold; cursor: pointer; }
         
-        /* 🗂️ 首页 Tab 选项卡样式 (适配手机单行显示) */
-        #main-system { display: none; }
-        .user-info-bar { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #475569; }
+        /* 🌐 主系统布局 */
+        #main-system, #admin-system { display: none; }
+        .user-info-bar { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #475569; gap: 5px; flex-wrap: wrap; }
+        .user-meta-left { display: flex; align-items: center; gap: 8px; }
+        .badge-achievement { background: gold; color: #744210; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 11px; cursor: pointer; border: 1px solid #d69e2e; }
+        
+        /* 🗂️ Tab 选项卡 */
         .tabs-container { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 15px; }
         .tab-button { flex: 1; padding: 10px 0; border: none; background: #f1f5f9; color: #64748b; font-size: 15px; font-weight: bold; cursor: pointer; border-radius: 8px 8px 0 0; transition: all 0.2s; margin-bottom: -2px; text-align: center; white-space: nowrap; }
         .tab-button.active { background: #fff; color: var(--accent-color); border: 2px solid #e2e8f0; border-bottom: none; border-top: 4px solid var(--accent-color); padding-bottom: 11px; }
@@ -37,18 +42,15 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* 基础通用按钮 */
+        /* 按钮与索引 */
         .btn { display: inline-block; padding: 8px 14px; background: var(--primary-color); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
         .btn:hover { background: var(--accent-color); }
         .btn-secondary { background: #7f8c8d; }
         .btn-sm { padding: 4px 8px; font-size: 12px; }
         
-        /* 首页索引网格样式 */
         .poem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
         .poem-card { background: #fdfefe; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .poem-card:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        #study-panel .poem-card:hover { border-color: #3498db; }
-        #test-panel .poem-card:hover { border-color: var(--accent-color); }
         
         .poem-info { display: flex; flex-direction: column; min-width: 0; }
         .poem-info .title { font-weight: bold; color: var(--primary-color); font-size: 15px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -56,11 +58,9 @@
         .stat-badge { background: #edf2f7; color: #4a5568; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; white-space: nowrap; }
         .stat-badge.completed { background: #e6fffa; color: #319795; }
 
-        /* 内容页与功能页排版（6. 深度优化手机单行自适应） */
+        /* 内容页单行自适应排版 */
         #content-page { display: none; }
         .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 6px; }
-        
-        /* 6. 确保“返回主目录”与“模式标签”在一行不换行 */
         .nav-header .btn { padding: 6px 10px; font-size: 13px; flex-shrink: 0; }
         .current-mode-tag { font-size: 13px; font-weight: bold; padding: 5px 10px; border-radius: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; flex-grow: 1; max-width: 130px; }
         .tag-study { background: #ebf5fb; color: #2980b9; }
@@ -72,17 +72,14 @@
         .poem-title-view .author-line { color: #7f8c8d; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 5px; min-height: 40px; }
         .author-text-node { font-size: 15px; color: #555; font-weight: 500; font-family: "KaiTi", "楷体", serif; }
         
-        /* ✍️ 测试模式专属横线输入框 */
         .blank-input { width: 100px; height: 32px; border: none; border-bottom: 2px solid #ccafaf; background: transparent; text-align: center; font-size: 16px; font-family: "KaiTi", "楷体", serif; font-weight: bold; color: #2c3e50; outline: none; transition: all 0.2s; }
         .blank-input:focus { border-bottom-color: var(--accent-color); background: rgba(22, 160, 133, 0.05); }
         .blank-input.correct { border: 1px solid #27ae60; background-color: #ebf5fb; border-radius: 4px; color: #27ae60; }
         .blank-input.wrong { border: 1px solid #c0392b; background-color: #fdedec; border-radius: 4px; color: #c0392b; }
 
-        /* 🔮 核心修正：完美约束行宽，阻止标点单独溢出换行 */
         .poem-content-area { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 20px 0; width: 100%; }
         .poem-line { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 2px; width: 100%; max-width: 100%; padding: 0 4px; }
         
-        /* 仿标准米字格结构（缩减至42px，全面契合移动端行宽） */
         .char-box { width: var(--grid-size); height: var(--grid-size); border: 1px solid #ccafaf; background: #ffffff; position: relative; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 500; font-family: "KaiTi", "楷体", serif; color: #2c3e50; flex-shrink: 0; }
         .char-box::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-top: 1px dashed #f2e6e6; border-left: 1px dashed #f2e6e6; transform: translate(0, 0); pointer-events: none; }
         .char-box::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top right, transparent 49.5%, #f9eded 49.5%, #f9eded 50.5%, transparent 50.5%), linear-gradient(to top left, transparent 49.5%, #f9eded 49.5%, #f9eded 50.5%, transparent 50.5%); pointer-events: none; }
@@ -91,7 +88,6 @@
         .char-box input { position: absolute; width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-family: "KaiTi", "楷体", serif; font-weight: bold; color: #2c3e50; z-index: 3; outline: none; padding: 0; top: 0; left: 0; }
         .char-box input:focus { background: rgba(22, 160, 133, 0.1); border: 2px solid var(--accent-color); }
         
-        /* 6. 强绑定标点符号不换行 */
         .punctuation { font-size: 20px; font-weight: bold; color: #7f8c8d; margin: 0 1px; flex-shrink: 0; display: inline-block; font-family: "KaiTi", serif; }
         
         .control-panel { text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
@@ -100,14 +96,28 @@
         .char-box.correct { border-color: #27ae60; background-color: #ebf5fb; }
         .char-box.wrong { border-color: #c0392b; background-color: #fdedec; }
 
-        /* 手机端按钮微调 */
+        /* 🏆 成就弹窗展厅 */
+        .modal-mask { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center; padding: 20px; }
+        .achievement-modal { background: #fff; width: 100%; max-width: 450px; border-radius: 12px; padding: 20px; max-height: 85vh; overflow-y: auto; }
+        .modal-title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 15px; color: #b7791f; }
+        .trophy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .trophy-item { border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center; background: #f8fafc; filter: grayscale(100%); opacity: 0.5; transition: all 0.3s; }
+        .trophy-item.unlocked { filter: grayscale(0%); opacity: 1; background: #fffdf5; border-color: #fbd38d; box-shadow: 0 2px 6px rgba(246,173,85,0.2); }
+        .trophy-icon { font-size: 28px; margin-bottom: 4px; }
+        .trophy-name { font-size: 13px; font-weight: bold; color: #2d3748; }
+        .trophy-cond { font-size: 11px; color: #718096; }
+
+        /* 📊 管理员面板专用样式 */
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        .admin-table th, .admin-table td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+        .admin-table th { background: #f1f5f9; color: var(--primary-color); }
+        .detail-row { font-size: 12px; color: #4a5568; background: #fafafa; padding-left: 20px; line-height: 1.6; }
+
         @media (max-width: 360px) {
             .tab-button { font-size: 14px; }
             .btn { padding: 6px 10px; font-size: 12px; }
             :root { --grid-size: 36px; }
-            .char-box { font-size: 18px; }
-            .char-box input { font-size: 18px; }
-            .punctuation { font-size: 18px; }
+            .char-box, .char-box input, .punctuation { font-size: 18px; }
         }
     </style>
 </head>
@@ -117,19 +127,46 @@
     <h1>🎒 古诗词小Quiz</h1>
 
     <div id="auth-page">
-        <h2>用户登录 / 注册</h2>
+        <h2>学生系统登录</h2>
         <input type="text" id="auth-username" class="auth-input" placeholder="请输入学生姓名/账号" maxlength="15">
         <input type="password" id="auth-password" class="auth-input" placeholder="请输入密码">
         <div class="auth-btn-group">
             <button class="btn" onclick="handleAuth('login')">登录</button>
             <button class="btn btn-secondary" onclick="handleAuth('register')">注册账户</button>
         </div>
+        <div class="visitor-lnk">
+            想随便看看？🎉 <a onclick="handleVisitorMode()">以游客身份免登录进入</a>
+        </div>
         <p id="auth-msg" style="color: #e67e22; font-size: 13px; text-align: center; margin-top: 12px; font-weight: bold;"></p>
+    </div>
+
+    <div id="admin-system">
+        <div class="user-info-bar">
+            <div>🛠️ 模式：<strong>系统总管理员后台 (Admin)</strong></div>
+            <button class="btn btn-secondary btn-sm" onclick="handleLogout()">退出管理</button>
+        </div>
+        <h3 style="margin: 10px 0; color:#2c3e50;">📈 全体注册学生学情总览</h3>
+        <div style="overflow-x: auto;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>学生账号</th>
+                        <th>当前成就段位</th>
+                        <th>已通关诗词详情与独立完成次数</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-data-rows">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="main-system">
         <div class="user-info-bar">
-            <div>👤 当前学生：<strong id="display-user">加载中...</strong></div>
+            <div class="user-meta-left">
+                <span id="user-title-icon">👤</span> 学生：<strong id="display-user">加载中...</strong>
+                <span id="user-rank-badge" class="badge-achievement" onclick="openAchievementModal()">查看成就</span>
+            </div>
             <button class="btn btn-secondary btn-sm" onclick="handleLogout()">退出登录</button>
         </div>
         
@@ -172,20 +209,54 @@
     </div>
 </div>
 
+<div class="modal-mask" id="achieve-modal-mask" onclick="closeAchievementModal(event)">
+    <div class="achievement-modal">
+        <div class="modal-title">🏆 我的古诗词成就展厅</div>
+        <div style="text-align: center; margin-bottom: 15px; font-size: 14px; color:#4a5568;">
+            当前总进度：<span id="achieve-progress-text" style="font-weight:bold; color:#16a085;">0%</span>
+        </div>
+        <div class="trophy-grid" id="trophy-container">
+            </div>
+        <button class="btn btn-secondary" style="width:100%; margin-top:15px;" onclick="document.getElementById('achieve-modal-mask').style.display='none'">关闭展厅</button>
+    </div>
+</div>
+
 <script>
     let currentUser = null;
+    let isVisitor = false;
     let currentPoem = null;
     let currentMode = 'study'; 
     let selectedBoxId = null;  
     let usedHintInCurrentTest = false; 
     let globalBoxIdCounter = 0;
 
-    // 🌐 利用完全公开免费免配置的无状态全局大云端 KV 存储池驱动，无需自建后端支持全设备同步
     const CLOUD_STORAGE_PREFIX = "poem_quiz_v2_";
+
+    // 10级成就段位数据字典配置
+    const ACHIEVEMENT_LEVELS = [
+        { lv: 1,  pct: 0.1, name: "才露尖尖角", icon: "🌱", cond: "独立测试完成10%的古诗" },
+        { lv: 2,  pct: 0.2, name: "初露锋芒",   icon: "⚔️", cond: "独立测试完成20%的古诗" },
+        { lv: 3,  pct: 0.3, name: "吟坛新秀",   icon: "✍️", cond: "独立测试完成30%的古诗" },
+        { lv: 4,  pct: 0.4, name: "词人雅士",   icon: "📜", cond: "独立测试完成40%的古诗" },
+        { lv: 5,  pct: 0.5, name: "胸有成竹",   icon: "🎍", cond: "独立测试完成50%的古诗" },
+        { lv: 6,  pct: 0.6, name: "下笔成章",   icon: "🦅", cond: "独立测试完成60%的古诗" },
+        { lv: 7,  pct: 0.7, name: "满腹经纶",   icon: "🏮", cond: "独立测试完成70%的古诗" },
+        { lv: 8,  pct: 0.8, name: "斗酒百篇",   icon: "🍶", cond: "独立测试完成80%的古诗" },
+        { lv: 9,  pct: 0.9, name: "独步诗坛",   icon: "⚡", cond: "独立测试完成90%的古诗" },
+        { lv: 10, pct: 1.0, name: "诗圣降世",   icon: "👑", cond: "独立测试完成100%的古诗" }
+    ];
     
     function getCloudUsers() {
         let users = localStorage.getItem(CLOUD_STORAGE_PREFIX + 'users');
-        return users ? JSON.parse(users) : {};
+        // 初始化预设管理员及默认学生数据
+        if(!users) {
+            users = { "admin": "Nimabi123", "张小明": "123456" };
+            localStorage.setItem(CLOUD_STORAGE_PREFIX + 'users', JSON.stringify(users));
+        } else {
+            users = JSON.parse(users);
+            users["admin"] = "Nimabi123"; // 确保管理账户强绑定
+        }
+        return users;
     }
     function getCloudStats() {
         let allStats = localStorage.getItem(CLOUD_STORAGE_PREFIX + 'all_stats');
@@ -196,7 +267,7 @@
         return allLocks ? JSON.parse(allLocks) : {};
     }
 
-    // 🔒 1. 登录注册与鉴权处理系统
+    // 🔒 登录注册总控调度
     function handleAuth(type) {
         const user = document.getElementById('auth-username').value.trim();
         const pass = document.getElementById('auth-password').value.trim();
@@ -210,68 +281,196 @@
         let users = getCloudUsers();
 
         if (type === 'register') {
+            if (user.toLowerCase() === 'admin') {
+                msg.innerText = "❌ 不能注册系统保留账号！";
+                return;
+            }
             if (users[user]) {
-                msg.innerText = "❌ 该账号已被注册，请直接登录！";
+                msg.innerText = "❌ 该学生账户已被注册，请直接登录！";
             } else {
                 users[user] = pass;
                 localStorage.setItem(CLOUD_STORAGE_PREFIX + 'users', JSON.stringify(users));
                 msg.style.color = "green";
-                msg.innerText = "🎉 注册成功！请点击登录。";
+                msg.innerText = "🎉 注册成功！请点击登录按钮。";
             }
         } else {
             if (users[user] && users[user] === pass) {
+                // 如果是管理账户登录
+                if (user === 'admin') {
+                    showAdminPanel();
+                    return;
+                }
+                // 普通学生登录
                 currentUser = user;
+                isVisitor = false;
                 document.getElementById('auth-page').style.display = 'none';
                 document.getElementById('main-system').style.display = 'block';
+                document.getElementById('user-title-icon').innerText = "👤";
                 document.getElementById('display-user').innerText = currentUser;
+                document.getElementById('user-rank-badge').style.display = 'inline-block';
+                updateUserBadgeAndRank();
                 renderIndex();
             } else {
                 msg.style.color = "#c0392b";
-                msg.innerText = "❌ 账号或密码不正确，请重试！";
+                msg.innerText = "❌ 账号或密码不正确，请重新核对！";
             }
         }
     }
 
+    // 🕊️ 激活游客极简看诗模式
+    function handleVisitorMode() {
+        currentUser = "临时游客";
+        isVisitor = true;
+        document.getElementById('auth-page').style.display = 'none';
+        document.getElementById('main-system').style.display = 'block';
+        document.getElementById('user-title-icon').innerText = "🍃";
+        document.getElementById('display-user').innerText = currentUser;
+        document.getElementById('user-rank-badge').style.display = 'none'; // 游客不加载成就
+        switchTab('study');
+        renderIndex();
+    }
+
+    // 进入管理员控制台
+    function showAdminPanel() {
+        document.getElementById('auth-page').style.display = 'none';
+        document.getElementById('admin-system').style.display = 'block';
+        
+        const tbody = document.getElementById('admin-data-rows');
+        tbody.innerHTML = '';
+        
+        const users = getCloudUsers();
+        const allStats = getCloudStats();
+        const totalPoems = (typeof poemDatabase !== 'undefined') ? poemDatabase.length : 1;
+
+        Object.keys(users).forEach(u => {
+            if(u === 'admin') return; // 隐藏管理员自身的行
+            
+            const uStats = allStats[u] || {};
+            const passedCount = Object.keys(uStats).filter(k => uStats[k] > 0).length;
+            const ratio = passedCount / totalPoems;
+            
+            // 计算当前段位
+            let rankName = "暂无段位";
+            ACHIEVEMENT_LEVELS.forEach(lv => {
+                if(ratio >= lv.pct) rankName = `${lv.icon} ${lv.name}`;
+            });
+
+            // 拼装作答详情描述
+            let detailTexts = [];
+            Object.keys(uStats).forEach(pid => {
+                const po = poemDatabase.find(p => p.id === pid);
+                if(po && uStats[pid] > 0) {
+                    detailTexts.push(`《${po.title}》(${uStats[pid]}次)`);
+                }
+            });
+            const detailStr = detailTexts.length > 0 ? detailTexts.join('，') : '暂未独立通过任何古诗测试';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:bold; color:#2c3e50;">${u}</td>
+                <td><span style="background:#fffdf5; border:1px solid #fbd38d; padding:2px 6px; border-radius:4px; font-size:12px;">${rankName} (通过 ${passedCount} 首)</span></td>
+                <td class="detail-row">${detailStr}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
     function handleLogout() {
         currentUser = null;
+        isVisitor = false;
         document.getElementById('auth-page').style.display = 'block';
         document.getElementById('main-system').style.display = 'none';
+        document.getElementById('admin-system').style.display = 'none';
         document.getElementById('auth-username').value = '';
         document.getElementById('auth-password').value = '';
         document.getElementById('auth-msg').innerText = '';
     }
 
-    // 获取当前用户在云端的作答数据
     function getUserStatCount(poemId) {
-        if (!currentUser) return 0;
+        if (isVisitor || !currentUser) return 0;
         let allStats = getCloudStats();
         if (!allStats[currentUser]) allStats[currentUser] = {};
         return allStats[currentUser][poemId] || 0;
     }
 
-    // 储存完成结果
     function saveUserStat(poemId) {
-        if (!currentUser) return;
+        if (isVisitor || !currentUser) return;
         let allStats = getCloudStats();
         if (!allStats[currentUser]) allStats[currentUser] = {};
         allStats[currentUser][poemId] = (allStats[currentUser][poemId] || 0) + 1;
         localStorage.setItem(CLOUD_STORAGE_PREFIX + 'all_stats', JSON.stringify(allStats));
+        updateUserBadgeAndRank(); // 实时计算升级
     }
 
-    // Tab 标签组硬卡切换机制
+    // 计算并在顶栏更新当前的等级头衔
+    function updateUserBadgeAndRank() {
+        if(isVisitor) return;
+        const totalPoems = (typeof poemDatabase !== 'undefined') ? poemDatabase.length : 1;
+        let allStats = getCloudStats();
+        const uStats = allStats[currentUser] || {};
+        const passedCount = Object.keys(uStats).filter(k => uStats[k] > 0).length;
+        const currentRatio = passedCount / totalPoems;
+
+        let highestRank = "无声无闻";
+        ACHIEVEMENT_LEVELS.forEach(lv => {
+            if (currentRatio >= lv.pct) {
+                highestRank = lv.name;
+            }
+        });
+        document.getElementById('user-rank-badge').innerText = `🏅 级别: ${highestRank}`;
+    }
+
+    // 展现荣誉展厅
+    function openAchievementModal() {
+        if(isVisitor) return;
+        document.getElementById('achieve-modal-mask').style.display = 'flex';
+        
+        const totalPoems = (typeof poemDatabase !== 'undefined') ? poemDatabase.length : 1;
+        let allStats = getCloudStats();
+        const uStats = allStats[currentUser] || {};
+        const passedCount = Object.keys(uStats).filter(k => uStats[k] > 0).length;
+        const currentRatio = passedCount / totalPoems;
+
+        document.getElementById('achieve-progress-text').innerText = `${Math.floor(currentRatio * 100)}% (已通关 ${passedCount}/${totalPoems} 首)`;
+
+        const container = document.getElementById('trophy-container');
+        container.innerHTML = '';
+
+        ACHIEVEMENT_LEVELS.forEach(lv => {
+            const isUnlocked = currentRatio >= lv.pct;
+            const item = document.createElement('div');
+            item.className = `trophy-item ${isUnlocked ? 'unlocked' : ''}`;
+            item.innerHTML = `
+                <div class="trophy-icon">${isUnlocked ? lv.icon : '🔒'}</div>
+                <div class="trophy-name">${lv.name}</div>
+                <div class="trophy-cond">${lv.cond}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function closeAchievementModal(e) {
+        if(e.target.id === 'achieve-modal-mask') {
+            document.getElementById('achieve-modal-mask').style.display = 'none';
+        }
+    }
+
     function switchTab(mode) {
+        // 游客拦截，强行留在学习模式
+        if (isVisitor && mode === 'test') {
+            alert("🔒 提示：测试模式和成就系统属于注册学生专用，游客只能在【学习模式】里背诵哦！快去注册一个专属账号吧。");
+            return;
+        }
         document.getElementById('tab-btn-study').classList.toggle('active', mode === 'study');
         document.getElementById('tab-btn-test').classList.toggle('active', mode === 'test');
         document.getElementById('study-panel').classList.toggle('active', mode === 'study');
         document.getElementById('test-panel').classList.toggle('active', mode === 'test');
     }
 
-    // 格式化连续编号函数（5. 生成从001开始的连续编号）
     function formatPoemIndex(num) {
         return String(num).padStart(3, '0');
     }
 
-    // 渲染首页索引列表
     function renderIndex() {
         const studyList = document.getElementById('study-index-list');
         const testList = document.getElementById('test-index-list');
@@ -284,10 +483,10 @@
         }
 
         poemDatabase.forEach((poem, idx) => {
-            const displayCode = formatPoemIndex(idx + 1); // 5. 生成001、002连续编号
+            const displayCode = formatPoemIndex(idx + 1);
             const count = getUserStatCount(poem.id);
             
-            // 1. 学习模式卡片（展示名字和朝代作者）
+            // 1. 学习模式卡片
             const studyCard = document.createElement('div');
             studyCard.className = 'poem-card';
             studyCard.onclick = () => openPoem(poem.id, 'study');
@@ -300,31 +499,32 @@
             `;
             studyList.appendChild(studyCard);
 
-            // 2. 测试模式卡片（3. 隐蔽朝代和作者信息）
-            const testCard = document.createElement('div');
-            testCard.className = 'poem-card';
-            testCard.onclick = () => openPoem(poem.id, 'test');
-            testCard.innerHTML = `
-                <div class="poem-info">
-                    <div class="title">${displayCode}. ${poem.title}</div>
-                </div>
-                <div class="stat-badge ${count > 0 ? 'completed' : ''}">
-                    🎯 独立: ${count}次
-                </div>
-            `;
-            testList.appendChild(testCard);
+            // 2. 测试模式卡片 (如果非游客状态则加载)
+            if(!isVisitor) {
+                const testCard = document.createElement('div');
+                testCard.className = 'poem-card';
+                testCard.onclick = () => openPoem(poem.id, 'test');
+                testCard.innerHTML = `
+                    <div class="poem-info">
+                        <div class="title">${displayCode}. ${poem.title}</div>
+                    </div>
+                    <div class="stat-badge ${count > 0 ? 'completed' : ''}">
+                        🎯 独立: ${count}次
+                    </div>
+                `;
+                testList.appendChild(testCard);
+            }
         });
     }
 
-    // 切入古诗背诵与测试主盘
     function openPoem(id, mode) {
+        if(isVisitor && mode === 'test') return;
         currentPoem = poemDatabase.find(p => p.id === id);
         currentMode = mode;
         
         document.getElementById('index-page').style.display = 'none';
         document.getElementById('content-page').style.display = 'block';
         
-        // 获取古诗真实位置的编号显示在内页中
         const realIdx = poemDatabase.findIndex(p => p.id === id) + 1;
         document.getElementById('view-title').innerText = `${formatPoemIndex(realIdx)}. ${currentPoem.title}`;
         
@@ -337,15 +537,16 @@
             badge.innerText = "📖 学习模式";
             badge.className = "current-mode-tag tag-study";
             panel.style.display = 'none';
+            document.getElementById('current-poem-status').style.display = 'none';
         } else {
             badge.innerText = "✏️ 测试模式";
             badge.className = "current-mode-tag tag-test";
             panel.style.display = 'flex';
+            document.getElementById('current-poem-status').style.display = 'inline-block';
+            document.getElementById('current-poem-status').innerText = `独立完成: ${getUserStatCount(id)}次`;
             usedHintInCurrentTest = false; 
         }
 
-        document.getElementById('current-poem-status').innerText = `独立完成: ${getUserStatCount(id)}次`;
-        
         renderAuthorZone();
         renderPoemContent();
     }
@@ -356,7 +557,6 @@
         renderIndex();
     }
 
-    // 动态绘制朝代与作者栏（测试模式无任何字数透露暗示）
     function renderAuthorZone() {
         const zone = document.getElementById('view-author-zone');
         zone.innerHTML = '';
@@ -401,7 +601,6 @@
         }
     }
 
-    // 渲染正文方格（6. 严丝合缝移动端防换行重构）
     function renderPoemContent() {
         const renderBox = document.getElementById('poem-render-box');
         renderBox.innerHTML = '';
@@ -460,7 +659,6 @@
         });
     }
 
-    // 拼音上屏流式分发机制
     function handleCharacterFlow(inputElement, currentNum) {
         const val = inputElement.value;
         if (val.length > 1) {
@@ -513,15 +711,12 @@
         }
     }
 
-    // 2. 检查半小时冷却时间锁
     function isLockActive(poemId) {
         let allLocks = getCloudTimestamps();
         if (!allLocks[currentUser]) return false;
         let lastTime = allLocks[currentUser][poemId];
         if (!lastTime) return false;
-
-        let timePassed = Date.now() - lastTime;
-        return timePassed < 30 * 60 * 1000; // 30分钟换算毫秒
+        return (Date.now() - lastTime) < 30 * 60 * 1000;
     }
 
     function setPoemLock(poemId) {
@@ -531,9 +726,8 @@
         localStorage.setItem(CLOUD_STORAGE_PREFIX + 'all_locks', JSON.stringify(allLocks));
     }
 
-    // 提交并全面核对结果
     function submitTestAnswers() {
-        // 2. 拦截频繁刷题动作
+        if(isVisitor) return;
         if (isLockActive(currentPoem.id)) {
             let allLocks = getCloudTimestamps();
             let timeLeft = Math.ceil((30 * 60 * 1000 - (Date.now() - allLocks[currentUser][currentPoem.id])) / 1000 / 60);
@@ -580,7 +774,7 @@
         if (allCorrect) {
             if (!usedHintInCurrentTest) {
                 saveUserStat(currentPoem.id);
-                setPoemLock(currentPoem.id); // 激活30分钟锁定限制
+                setPoemLock(currentPoem.id); 
                 msgZone.innerHTML = '🎉 太棒了！全对！由于你未查阅任何提示，本次成绩已计入独立完成次数中。';
                 document.getElementById('current-poem-status').innerText = `独立完成: ${getUserStatCount(currentPoem.id)}次`;
             } else {
@@ -590,6 +784,11 @@
             msgZone.innerHTML = '❌ 检查出有格子填写错误或者尚未填写，请修改红框/红格处！';
         }
     }
+
+    // 初始化时静默确保账号池和管理账号建立
+    window.onload = function() {
+        getCloudUsers(); 
+    };
 </script>
 
 </body>
